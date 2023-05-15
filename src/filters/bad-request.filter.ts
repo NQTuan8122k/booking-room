@@ -42,34 +42,4 @@ export class HttpExceptionFilter
       ...{ error_message_detail: 'Data request fail validation' },
     });
   }
-
-  //   private validationFilter(validationErrors: ValidationError[]): void {
-  //     for (const validationError of validationErrors) {
-  //       const children = validationError.children;
-
-  //       if (children && !!children) {
-  //         this.validationFilter(children);
-
-  //         return;
-  //       }
-
-  //       delete validationError.children;
-
-  //       const constraints = validationError.constraints;
-
-  //       if (!constraints) {
-  //         return;
-  //       }
-
-  //       for (const [constraintKey, constraint] of Object.entries(constraints)) {
-  //         // convert default messages
-  //         if (!constraint) {
-  //           // convert error message to error.fields.{key} syntax for i18n translation
-  //           constraints[constraintKey] = `error.fields.${_.snakeCase(
-  //             constraintKey,
-  //           )}`;
-  //         }
-  //       }
-  //     }
-  //   }
 }

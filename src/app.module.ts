@@ -5,11 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
-const DB_USERNAME = 'root';
-const DB_PASSWORD = 'password';
-const DB_HOST = '127.0.0.1';
-const DB_PORT = '27017';
-const DB_NAME = 'dacntt2';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -19,6 +16,12 @@ const DB_NAME = 'dacntt2';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

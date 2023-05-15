@@ -1,32 +1,36 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
-import { UserRegisterDto } from '../user/dto/user.dto';
 import { UserEntity } from '../user/schema/user.schema';
+import { UserRegisterDto } from '../user/dto/user/user.dto';
+import { AdminUserService } from '../user/admin.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService,
+    private adminUserService: AdminUserService,
   ) {}
 
-  async signIn(username = '', pass) {
-    const user = await this.userService.findOne({ username: username });
-    if (user?.password !== pass) {
-      throw new UnauthorizedException();
-    }
-    const payload = { username: user?.username, sub: user?.userId };
-    return {
-      // access_token: 'await this.jwtService.signAsync(payload)',
-      access_token: await this.jwtService.signAsync(payload),
-    };
+  async signIn({ username }) {
+    return await this.userService.findOne({ username: username });
   }
-  async findOne(data: object): Promise<UserEntity> {
+  async findOne(data: object): Promise<UserInfoDto> {
     return this.userService.findOne({ ...data });
   }
 
   async create(user: UserRegisterDto) {
-    return this.userService.create(user);
+    return await this.userService.create(user);
+  }
+
+  async signInAdmin({ username }) {
+    return await this.adminUserService.findOne({ username: username });
+  }
+  async findOneAdmin(data: object): Promise<UserInfoDto> {
+    return this.adminUserService.findOne({ ...data });
+  }
+
+  async createAdmin(user: UserRegisterDto) {
+    return await this.adminUserService.create(user);
   }
 }

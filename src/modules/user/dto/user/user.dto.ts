@@ -4,6 +4,7 @@ import {
   Length,
   MaxLength,
   MinLength,
+  isString,
 } from 'class-validator';
 import { RoleType } from 'src/constants/role-file';
 import { ApiProperty } from '@nestjs/swagger';
@@ -44,8 +45,8 @@ export class UserRegisterDto {
   address: string;
 
   @ApiProperty()
-  createAt: string;
+  createAt?: string;
 
   @ApiProperty()
-  role: RoleType;
+  role?: RoleType;
 }

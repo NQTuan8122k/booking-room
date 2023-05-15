@@ -3,10 +3,10 @@ import { Document, HydratedDocument, Types } from 'mongoose';
 import { ROLE } from 'src/constants';
 import { RoleType } from 'src/constants/role-file';
 
-export type UserDocument = HydratedDocument<UserEntity>;
+export type UserDocument = HydratedDocument<AdminEntity>;
 
 @Schema({ versionKey: false, timestamps: true })
-export class UserEntity {
+export class AdminEntity {
   @Prop()
   fullname: string;
 
@@ -47,4 +47,4 @@ export class UserEntity {
   // manpowers: Types.ObjectId[];
 }
 
-export const UserSchema = SchemaFactory.createForClass(UserEntity);
+export const UserSchema = SchemaFactory.createForClass(AdminEntity);

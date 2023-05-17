@@ -31,6 +31,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/swagger": "^6.3.0",
     "@nestjs/typeorm": "^9.0.1",
+    "@types/bcrypt": "^5.0.0",
     "@types/passport": "^1.0.12",
     "@types/webpack-env": "^1.18.0",
     "bcrypt": "^5.1.0",

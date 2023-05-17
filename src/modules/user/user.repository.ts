@@ -1,26 +1,25 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDo } from './schema/user.do';
+import { UserEntity } from './schema/user.schema';
+import { UserRegisterDto } from './dto/user/user.dto';
 
-export class UsersRepository {
+export class UserRepository {
   constructor(
-    @InjectModel('User')
+    @InjectModel(UserEntity.name)
     private userModel: Model<UserDo>,
   ) {}
 
-  async createOne(user): Promise<any> {
-    const result = await this.userModel.create(user);
-    return result;
+  async createNewUser(user: UserRegisterDto): Promise<any> {
+    return await this.userModel.create(user);
   }
 
-  async findAll(): Promise<any> {
-    const result = await this.userModel.find({});
-    return result;
+  async findAll(data): Promise<UserInfoDto[]> {
+    return await this.userModel.find({ ...data });
   }
 
-  async findOne(username): Promise<any> {
-    const result = await this.userModel.findOne({ username });
-    return result;
+  async findOne(data): Promise<UserInfoDto> {
+    return await this.userModel.findOne({ ...data });
   }
 
   async updateOne(username): Promise<any> {

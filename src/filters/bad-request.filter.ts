@@ -16,6 +16,7 @@ export class HttpExceptionFilter
     const response = ctx.getResponse<Response>();
     const statusCode = exception.getStatus();
     const r = exception.getResponse() as { message: ValidationError[] };
+    console.log('exception****exception', exception);
 
     // const validationErrors = r.message;
     // this.validationFilter(validationErrors);

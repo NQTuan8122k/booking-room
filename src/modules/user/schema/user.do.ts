@@ -13,7 +13,6 @@ export class UserDo {
   createAt: string;
   lastModify: string | null;
   role: string;
-  manpowers: Types.ObjectId[];
 
   constructor(props: Partial<UserDo>) {
     this._id = props._id;
@@ -28,6 +27,5 @@ export class UserDo {
     this.createAt = props.createAt || null;
     this.lastModify = props.lastModify || null;
     this.role = props.role || null;
-    this.manpowers = props.manpowers || null;
   }
 }

@@ -255,7 +255,6 @@ export class AuthController {
 
       const {
         address,
-        createAt,
         dateOfBirth,
         email,
         fullname,

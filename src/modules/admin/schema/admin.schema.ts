@@ -47,4 +47,4 @@ export class AdminEntity {
   // manpowers: Types.ObjectId[];
 }
 
-export const UserSchema = SchemaFactory.createForClass(AdminEntity);
+export const AdminSchema = SchemaFactory.createForClass(AdminEntity);

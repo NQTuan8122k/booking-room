@@ -55,24 +55,17 @@ export class UserService {
       queryUserInfo,
     );
 
-    throw new HttpException(
-      {
-        status: HttpStatus.BAD_REQUEST,
-        description: userInToken.errorMessage,
-        error_message: userInToken.errorMessage,
-        error_detail: null,
-        timestamp: new Date().toISOString(),
-      },
-      HttpStatus.BAD_REQUEST,
-    );
     if (!userInToken.user && !!userInToken.errorMessage) {
-      return {
-        status: 400,
-        description: userInToken.errorMessage,
-        error_message: userInToken.errorMessage,
-        error_detail: null,
-        timestamp: new Date().toISOString(),
-      };
+      throw new HttpException(
+        {
+          status: 400,
+          description: userInToken.errorMessage,
+          error_message: userInToken.errorMessage,
+          error_detail: null,
+          timestamp: new Date().toISOString(),
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const token = await this.jwtTokenService.createAuthToken({
@@ -125,16 +118,19 @@ export class UserService {
         },
       };
     } else {
-      return {
-        request_id: 'string',
-        status: 200,
-        response_code: 'MY_INFO_200',
-        response_message: 'Get my info success',
-        response_description: `Get my info success. But do not have user with username: ${userInToken.user.username}`,
-        request_date_time: new Date().toISOString(),
-        ...token,
-        data: null,
-      };
+      throw new HttpException(
+        {
+          request_id: 'string',
+          status: 200,
+          response_code: 'MY_INFO_200',
+          response_message: 'Get my info success',
+          response_description: `Get my info success. But do not have user with username: ${userInToken.user.username}`,
+          request_date_time: new Date().toISOString(),
+          ...token,
+          data: null,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 }

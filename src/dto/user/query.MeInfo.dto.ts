@@ -1,8 +1,10 @@
 import { IsNotEmpty } from 'class-validator';
 
-// type IPlanObject = {};
+type IPlanObject = {
+  [key: string]: string;
+};
 
-export class QueryMeInfoDto<TData> {
+export class QueryMeInfoDto {
   @IsNotEmpty({ message: 'AccessToken is required' })
   accessToken: string;
 
@@ -10,5 +12,5 @@ export class QueryMeInfoDto<TData> {
   refreshToken: string;
 
   @IsNotEmpty({ message: 'Missing Data field' })
-  data: TData;
+  data: IPlanObject;
 }

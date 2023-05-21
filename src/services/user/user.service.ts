@@ -1,18 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { UserListQueryDto } from './dto/user/query.ListUser.dto';
-import { UserRegisterDto } from './dto/user/user.dto';
-import { UserDo } from './schema/user.do';
-import { UserEntity } from './schema/user.schema';
-import { UserRepository } from './user.repository';
+import { UserListQueryDto } from 'src/dto/user/query.ListUser.dto';
+import { QueryMeInfoDto } from 'src/dto/user/query.MeInfo.dto';
+import { UserRegisterDto } from 'src/dto/user/user.dto';
+import { UserRepository } from 'src/repo/user.repository';
 import { JwtTokenService } from 'src/shared/services/JwtTokenService.service';
-import { QueryMeInfoDto } from './dto/user/query.MeInfo.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(UserEntity.name)
     private userRepository: UserRepository,
     private jwtTokenService: JwtTokenService,
   ) {}
@@ -50,7 +45,7 @@ export class UserService {
     return await this.userRepository.createNewUser(user);
   }
 
-  async getMyInfo(queryUserInfo: QueryMeInfoDto<object>) {
+  async getMyInfo(queryUserInfo: QueryMeInfoDto) {
     const userInToken = await this.jwtTokenService.getUserFromToken(
       queryUserInfo,
     );

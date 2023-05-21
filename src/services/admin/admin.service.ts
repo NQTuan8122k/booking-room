@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserListQueryDto } from '../user/dto/user/query.ListUser.dto';
-import { UserRegisterDto } from '../user/dto/user/user.dto';
-import { UserDo } from '../user/schema/user.do';
-import { AdminEntity } from './schema/admin.schema';
+import { UserDao } from 'src/dao/user/user.dao';
+import { UserListQueryDto } from 'src/dto/user/query.ListUser.dto';
+import { UserRegisterDto } from 'src/dto/user/user.dto';
+import { AdminEntity } from 'src/schemas/admin.schema';
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectModel(AdminEntity.name)
-    private usersRepository: Model<UserDo>,
+    private usersRepository: Model<UserDao>,
   ) {}
 
   async findAll(data: UserListQueryDto): Promise<UserInfoDto[]> {

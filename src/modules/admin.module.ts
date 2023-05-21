@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtTokenService } from 'src/shared/services/JwtTokenService.service';
-import { AdminController } from './admin.controller';
-import { AdminService } from './admin.service';
-import { AdminEntity, AdminSchema } from './schema/admin.schema';
+import { AdminEntity, AdminSchema } from '../schemas/admin.schema';
+import { AdminController } from 'src/controller/admin/admin.controller';
+import { AdminService } from 'src/services/admin/admin.service';
 
 @Module({
   imports: [

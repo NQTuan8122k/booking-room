@@ -10,11 +10,11 @@ import {
 import type { Type } from '@nestjs/common/interfaces';
 import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
-import { AuthGuard } from '../guards/auth.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { AuthUserInterceptor } from '../interceptors/auth-user-interceptor.service';
 import { RoleType } from 'src/constants/role-file';
 import { PublicRoute } from './public-route.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 export function Auth(
   roles: RoleType[] = [],
@@ -24,7 +24,7 @@ export function Auth(
 
   return applyDecorators(
     SetMetadata('roles', roles),
-    UseGuards(AuthGuard({ public: isPublicRoute }), RolesGuard),
+    // UseGuards(AuthGuard({ public: isPublicRoute }), RolesGuard),
     ApiBearerAuth(),
     UseInterceptors(AuthUserInterceptor),
     ApiUnauthorizedResponse({ description: 'Unauthorized' }),

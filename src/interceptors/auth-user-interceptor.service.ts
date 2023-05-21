@@ -5,8 +5,8 @@ import type {
 } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 
-import { UserEntity } from 'src/modules/user/schema/user.schema';
 import { ContextProvider } from 'src/providers/context.provider';
+import { UserEntity } from 'src/schemas/user.schema';
 
 @Injectable()
 export class AuthUserInterceptor implements NestInterceptor {

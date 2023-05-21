@@ -9,103 +9,40 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { ROLE } from 'src/constants';
 import { Roles } from 'src/decorators/roles.decorator';
+import { QueryListUerDto } from 'src/dto/user/query.ListUser.dto';
+import { QueryMeInfoDto } from 'src/dto/user/query.MeInfo.dto';
+import { QueryUserInfoDto } from 'src/dto/user/query.UserInfo.dto';
 import { AuthenticationGuard } from 'src/guards/authentication.guard';
-import { AdminService } from './admin.service';
+import { UserService } from 'src/services/user/user.service';
 import { JwtTokenService } from 'src/shared/services/JwtTokenService.service';
-import { QueryMeInfoDto } from '../user/dto/user/query.MeInfo.dto';
-import { QueryUserInfoDto } from '../user/dto/user/query.UserInfo.dto';
-import {
-  QueryListUerDto,
-  UserDataDto,
-} from '../user/dto/user/query.ListUser.dto';
 
-@ApiTags('admin')
-@Controller('admin')
-export class AdminController {
+@ApiTags('users')
+@Controller('users')
+export class UserController {
   constructor(
-    private readonly adminService: AdminService,
+    private readonly usersService: UserService,
     private jwtTokenService: JwtTokenService,
   ) {}
 
   @UseGuards(AuthenticationGuard)
   @Post('myInfo')
-  @Roles(ROLE.USER, ROLE.ADMIN, ROLE.PROVIDER)
   async queryMyInfo(
     @Response() response,
-    @Body() queryUserInfo: QueryMeInfoDto<object>,
+    @Body() queryUserInfo: QueryMeInfoDto,
   ) {
-    const userInToken = await this.jwtTokenService.getUserFromToken(
-      queryUserInfo,
-    );
-    if (!userInToken.user && !!userInToken.errorMessage) {
-      return response.status(HttpStatus.BAD_REQUEST).json({
-        status: 400,
-        description: userInToken.errorMessage,
-        error_message: userInToken.errorMessage,
-        error_detail: null,
-        timestamp: new Date().toISOString(),
+    const res = await this.usersService.getMyInfo(queryUserInfo);
+
+    if (res.status === 200) {
+      response.status(HttpStatus.OK).json({
+        ...res,
       });
-    }
-
-    const token = await this.jwtTokenService.createAuthToken({
-      role: userInToken.user.role,
-      username: userInToken.user.username,
-    });
-
-    const user = await this.adminService.findOne({
-      username: userInToken.user.username,
-    });
-    if (!!user) {
-      const {
-        fullname,
-        dateOfBirth,
-        password,
-        username,
-        phoneNumber,
-        email,
-        address,
-        status,
-        createAt,
-        lastModify,
-        role,
-        createdAt,
-        updatedAt,
-      } = user;
-
-      return response.status(HttpStatus.OK).json({
-        request_id: 'string',
-        status: 200,
-        response_code: 'MY_INFO_200',
-        response_message: 'Get my info success',
-        response_description: 'Get my info success',
-        request_date_time: new Date().toISOString(),
-        ...token,
-        data: {
-          fullname,
-          dateOfBirth,
-          password,
-          username,
-          phoneNumber,
-          email,
-          address,
-          status,
-          createAt,
-          lastModify,
-          role,
-          createdAt,
-          updatedAt,
-        },
+    } else if (res.status === 400) {
+      response.status(HttpStatus.BAD_REQUEST).json({
+        ...res,
       });
     } else {
-      return response.status(HttpStatus.OK).json({
-        request_id: 'string',
-        status: 200,
-        response_code: 'MY_INFO_200',
-        response_message: 'Get my info success',
-        response_description: `Get my info success. But do not have user with username: ${userInToken.user.username}`,
-        request_date_time: new Date().toISOString(),
-        ...token,
-        data: null,
+      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        ...res,
       });
     }
   }
@@ -135,7 +72,7 @@ export class AdminController {
       username: userInToken.user.username,
     });
 
-    const user = await this.adminService.findOne({
+    const user = await this.usersService.findOne({
       ...queryUserInfo.data,
     });
     console.log('asdad', queryUserInfo.data);
@@ -219,7 +156,7 @@ export class AdminController {
       username: userInToken.user.username,
     });
 
-    const userList = await this.adminService.findAll({
+    const userList = await this.usersService.findAll({
       ...queryUserInfo.data,
     });
 
@@ -237,11 +174,7 @@ export class AdminController {
 
   @UseGuards(AuthenticationGuard)
   @Post('updateMe')
-  @Roles(ROLE.USER, ROLE.ADMIN, ROLE.PROVIDER)
-  async updateMe(
-    @Response() response,
-    @Body() queryUserInfo: QueryMeInfoDto<UserDataDto>,
-  ) {
+  async updateMe(@Response() response, @Body() queryUserInfo: QueryMeInfoDto) {
     const userInToken = await this.jwtTokenService.getUserFromToken(
       queryUserInfo,
     );
@@ -260,7 +193,7 @@ export class AdminController {
       username: userInToken.user.username,
     });
 
-    const user = await this.adminService.findOne({
+    const user = await this.usersService.findOne({
       username: userInToken.user.username,
     });
     if (!!user) {

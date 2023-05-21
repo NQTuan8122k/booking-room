@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-export class UserDo {
+export class UserDao {
   _id: Types.ObjectId;
   fullname: string;
   dateOfBirth: string;
@@ -14,7 +14,7 @@ export class UserDo {
   lastModify: string | null;
   role: string;
 
-  constructor(props: Partial<UserDo>) {
+  constructor(props: Partial<UserDao>) {
     this._id = props._id;
     this.email = props.email || null;
     this.dateOfBirth = props.dateOfBirth || null;

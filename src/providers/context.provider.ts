@@ -1,5 +1,5 @@
 import { getValue, setValue } from 'express-ctx';
-import { UserEntity } from 'src/modules/user/schema/user.schema';
+import { UserEntity } from 'src/schemas/user.schema';
 
 // import type { LanguageCode } from '../constants';
 

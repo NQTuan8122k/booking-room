@@ -1,8 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserRegisterDto } from '../../dto/user/user.dto';
-import { UserRepository } from 'src/repo/user.repository';
-import { ROLE } from 'src/constants';
 import * as bcrypt from 'bcrypt';
+
+import { UserRegisterDto } from '../../dto/user/user.dto';
+import { UserRepository } from '../../repo/user.repository';
+import { ROLE } from '../../constants';
 
 @Injectable()
 export class AuthSignupService {
@@ -10,35 +11,26 @@ export class AuthSignupService {
 
   async signup(signupData: UserRegisterDto) {
     const user = await this.userRepository.findOne({
-      username: signupData.username,
+      username: signupData.username
     });
 
     const saltOrRounds = 10;
     // const saltOrRounds = await bcrypt.genSalt();
 
-    if (!!user?.username) {
+    if (user?.username) {
       throw new HttpException(
         {
           status: 400,
           description: 'Duplicate username',
           error_message: 'Duplicate username',
           error_detail: null,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
-    const {
-      address,
-      dateOfBirth,
-      email,
-      fullname,
-      password,
-      phoneNumber,
-      role,
-      username,
-    } = signupData;
+    const { address, dateOfBirth, email, fullname, password, phoneNumber, role, username } = signupData;
 
     const hashPassword = await bcrypt.hash(password, saltOrRounds);
 
@@ -49,14 +41,12 @@ export class AuthSignupService {
       fullname,
       password: hashPassword,
       phoneNumber,
-      ...(role === ROLE.USER || role === ROLE.PROVIDER
-        ? { role }
-        : { role: undefined }),
+      ...(role === ROLE.USER || role === ROLE.PROVIDER ? { role } : { role: undefined }),
       username,
-      createAt: new Date().toISOString(),
+      createAt: new Date().toISOString()
     });
 
-    if (!!signupUser.username) {
+    if (signupUser.username) {
       return signupUser;
     }
 
@@ -66,9 +56,9 @@ export class AuthSignupService {
         description: 'Signup internal error',
         error_message: 'Internal server error',
         error_detail: null,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       },
-      HttpStatus.BAD_REQUEST,
+      HttpStatus.BAD_REQUEST
     );
   }
 }

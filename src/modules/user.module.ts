@@ -7,11 +7,9 @@ import { UserService } from 'src/services/user/user.service';
 import { JwtTokenService } from 'src/shared/services/JwtTokenService.service';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: UserEntity.name, schema: UserSchema }]),
-  ],
+  imports: [MongooseModule.forFeature([{ name: UserEntity.name, schema: UserSchema }])],
   providers: [UserService, JwtTokenService, UserRepository],
   controllers: [UserController],
-  exports: [UserService, UserRepository],
+  exports: [UserService, UserRepository]
 })
 export class UserModule {}

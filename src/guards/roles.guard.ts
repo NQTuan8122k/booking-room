@@ -22,11 +22,11 @@ export class RolesGuard implements CanActivate {
       }
       try {
         const payload = await this.jwtService.verifyAsync(token.refreshToken, {
-          secret: jwtConstants.secret,
+          secret: jwtConstants.secret
         });
         // console.log('payload', payload);
 
-        request['user'] = payload;
+        request.user = payload;
 
         return request;
       } catch (e) {
@@ -43,8 +43,7 @@ export class RolesGuard implements CanActivate {
     if (!roles) {
       return true;
     }
-    const hasRole = () =>
-      !!user.role == !!roles.find((item) => item === user.role);
+    const hasRole = () => !!user.role == !!roles.find((item) => item === user.role);
 
     // console.log(
     //   'hasRole',

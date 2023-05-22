@@ -1,39 +1,25 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserListQueryDto } from 'src/dto/user/query.ListUser.dto';
-import { QueryMeInfoDto } from 'src/dto/user/query.MeInfo.dto';
-import { UserRegisterDto } from 'src/dto/user/user.dto';
-import { UserRepository } from 'src/repo/user.repository';
-import { JwtTokenService } from 'src/shared/services/JwtTokenService.service';
+import { JwtTokenService } from '@app/shared/services/JwtTokenService.service';
+import { UserRepository } from '@app/repo/user.repository';
+import { UserListQueryDto } from '@app/dto/user/query.ListUser.dto';
+import { UserRegisterDto } from '@app/dto/user/user.dto';
+import { QueryMeInfoDto } from '@app/dto/user/query.MeInfo.dto';
+import { UserInfoDto } from '@app/dto/user/user.Info.dto';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private userRepository: UserRepository,
-    private jwtTokenService: JwtTokenService,
-  ) {}
+  constructor(private userRepository: UserRepository, private jwtTokenService: JwtTokenService) {}
 
   async findAll(data: UserListQueryDto): Promise<UserInfoDto[]> {
     return await this.userRepository.findAll({
-      ...(data?.username
-        ? { username: { $regex: data?.username, $options: 'i' } }
-        : {}),
-      ...(data?.address
-        ? { address: { $regex: data?.address, $options: 'i' } }
-        : {}),
-      ...(data?.createAt
-        ? { createAt: { $regex: data?.createAt, $options: 'i' } }
-        : {}),
-      ...(data?.dateOfBirth
-        ? { dateOfBirth: { $regex: data?.dateOfBirth, $options: 'i' } }
-        : {}),
+      ...(data?.username ? { username: { $regex: data?.username, $options: 'i' } } : {}),
+      ...(data?.address ? { address: { $regex: data?.address, $options: 'i' } } : {}),
+      ...(data?.createAt ? { createAt: { $regex: data?.createAt, $options: 'i' } } : {}),
+      ...(data?.dateOfBirth ? { dateOfBirth: { $regex: data?.dateOfBirth, $options: 'i' } } : {}),
       ...(data?.email ? { email: { $regex: data?.email, $options: 'i' } } : {}),
-      ...(data?.fullname
-        ? { fullname: { $regex: data?.fullname, $options: 'i' } }
-        : {}),
-      ...(data?.phoneNumber
-        ? { phoneNumber: { $regex: data?.phoneNumber, $options: 'i' } }
-        : {}),
-      ...(data?.role ? { role: { $regex: data?.role, $options: 'i' } } : {}),
+      ...(data?.fullname ? { fullname: { $regex: data?.fullname, $options: 'i' } } : {}),
+      ...(data?.phoneNumber ? { phoneNumber: { $regex: data?.phoneNumber, $options: 'i' } } : {}),
+      ...(data?.role ? { role: { $regex: data?.role, $options: 'i' } } : {})
     });
   }
 
@@ -46,32 +32,30 @@ export class UserService {
   }
 
   async getMyInfo(queryUserInfo: QueryMeInfoDto) {
-    const userInToken = await this.jwtTokenService.getUserFromToken(
-      queryUserInfo,
-    );
+    const userInToken = await this.jwtTokenService.getUserFromToken(queryUserInfo);
 
-    if (!userInToken.user && !!userInToken.errorMessage) {
+    if (!userInToken?.user && !!userInToken.errorMessage) {
       throw new HttpException(
         {
           status: 400,
           description: userInToken.errorMessage,
           error_message: userInToken.errorMessage,
           error_detail: null,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
 
     const token = await this.jwtTokenService.createAuthToken({
       role: userInToken.user.role,
-      username: userInToken.user.username,
+      username: userInToken.user.username
     });
 
     const user = await this.userRepository.findOne({
-      username: userInToken.user.username,
+      username: userInToken.user.username
     });
-    if (!!user) {
+    if (user) {
       const {
         fullname,
         dateOfBirth,
@@ -85,7 +69,7 @@ export class UserService {
         lastModify,
         role,
         createdAt,
-        updatedAt,
+        updatedAt
       } = user;
 
       return {
@@ -109,8 +93,8 @@ export class UserService {
           lastModify,
           role,
           createdAt,
-          updatedAt,
-        },
+          updatedAt
+        }
       };
     } else {
       throw new HttpException(
@@ -122,9 +106,9 @@ export class UserService {
           response_description: `Get my info success. But do not have user with username: ${userInToken.user.username}`,
           request_date_time: new Date().toISOString(),
           ...token,
-          data: null,
+          data: null
         },
-        HttpStatus.BAD_REQUEST,
+        HttpStatus.BAD_REQUEST
       );
     }
   }

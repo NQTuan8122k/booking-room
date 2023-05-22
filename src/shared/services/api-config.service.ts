@@ -56,27 +56,19 @@ export class ApiConfigService {
   get postgresConfig(): TypeOrmModuleOptions {
     let entities = [
       __dirname + '/../../modules/**/*.entity{.ts,.js}',
-      __dirname + '/../../modules/**/*.view-entity{.ts,.js}',
+      __dirname + '/../../modules/**/*.view-entity{.ts,.js}'
     ];
     let migrations = [__dirname + '/../../database/migrations/*{.ts,.js}'];
 
     if (module.hot) {
-      const entityContext = require.context(
-        './../../modules',
-        true,
-        /\.entity\.ts$/,
-      );
+      const entityContext = require.context('./../../modules', true, /\.entity\.ts$/);
       entities = entityContext.keys().map((id) => {
         const entityModule = entityContext<Record<string, unknown>>(id);
         const [entity] = Object.values(entityModule);
 
         return entity as string;
       });
-      const migrationContext = require.context(
-        './../../database/migrations',
-        false,
-        /\.ts$/,
-      );
+      const migrationContext = require.context('./../../database/migrations', false, /\.ts$/);
 
       migrations = migrationContext.keys().map((id) => {
         const migrationModule = migrationContext<Record<string, unknown>>(id);
@@ -100,7 +92,7 @@ export class ApiConfigService {
       database: this.getString('DB_DATABASE'),
       // subscribers: [UserSubscriber],
       migrationsRun: true,
-      logging: this.getBoolean('ENABLE_ORM_LOGS'),
+      logging: this.getBoolean('ENABLE_ORM_LOGS')
       // namingStrategy: new SnakeNamingStrategy(),
     };
   }
@@ -109,7 +101,7 @@ export class ApiConfigService {
     return {
       bucketRegion: this.getString('AWS_S3_BUCKET_REGION'),
       bucketApiVersion: this.getString('AWS_S3_API_VERSION'),
-      bucketName: this.getString('AWS_S3_BUCKET_NAME'),
+      bucketName: this.getString('AWS_S3_BUCKET_NAME')
     };
   }
 
@@ -124,7 +116,7 @@ export class ApiConfigService {
   get natsConfig() {
     return {
       host: this.getString('NATS_HOST'),
-      port: this.getNumber('NATS_PORT'),
+      port: this.getNumber('NATS_PORT')
     };
   }
 
@@ -132,13 +124,13 @@ export class ApiConfigService {
     return {
       privateKey: this.getString('JWT_PRIVATE_KEY'),
       publicKey: this.getString('JWT_PUBLIC_KEY'),
-      jwtExpirationTime: this.getNumber('JWT_EXPIRATION_TIME'),
+      jwtExpirationTime: this.getNumber('JWT_EXPIRATION_TIME')
     };
   }
 
   get appConfig() {
     return {
-      port: this.getString('PORT'),
+      port: this.getString('PORT')
     };
   }
 

@@ -2,13 +2,14 @@ import { Module, forwardRef } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtTokenService } from 'src/shared/services/JwtTokenService.service';
-import { UserModule } from './user.module';
+import { jwtConstants } from '@app/constants/constant';
+import { JwtTokenService } from '@app/shared/services/JwtTokenService.service';
+import { AuthSignupService } from '@app/services/auth/auth.signup.Service';
+import { AuthLoginService } from '@app/services/auth/auth.login.Service';
+import { AuthController } from '@app/controller/auth/auth.controller';
+
 import { AdminModule } from './admin.module';
-import { jwtConstants } from 'src/constants/constant';
-import { AuthController } from 'src/controller/auth/auth.controller';
-import { AuthSignupService } from 'src/services/auth/auth.signup.Service';
-import { AuthLoginService } from 'src/services/auth/auth.login.Service';
+import { UserModule } from './user.module';
 
 @Module({
   imports: [
@@ -19,10 +20,10 @@ import { AuthLoginService } from 'src/services/auth/auth.login.Service';
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
-      signOptions: { expiresIn: '900s' },
-    }),
+      signOptions: { expiresIn: '900s' }
+    })
   ],
   providers: [JwtTokenService, AuthSignupService, AuthLoginService],
-  controllers: [AuthController],
+  controllers: [AuthController]
 })
 export class AuthModule {}

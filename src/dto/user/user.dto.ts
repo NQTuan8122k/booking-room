@@ -1,13 +1,6 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  Length,
-  MaxLength,
-  MinLength,
-  isString,
-} from 'class-validator';
-import { RoleType } from 'src/constants/role-file';
+import { RoleType } from '@app/constants/role-file';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty, Length, MaxLength, MinLength } from 'class-validator';
 
 export class UserRegisterDto {
   @ApiProperty()

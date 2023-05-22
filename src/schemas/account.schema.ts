@@ -1,8 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
-import { UserEntity } from './user.schema';
 
-export type UserDocument = HydratedDocument<AccountEntity>;
+import { UserEntity } from './user.schema';
 
 @Schema({ versionKey: false, timestamps: true })
 export class AccountEntity {
@@ -42,5 +41,7 @@ export class AccountEntity {
   @Prop({ type: Types.ObjectId, ref: UserEntity.name })
   user: Types.ObjectId;
 }
+
+export type UserDocument = HydratedDocument<AccountEntity>;
 
 export const AccountSchema = SchemaFactory.createForClass(AccountEntity);

@@ -1,26 +1,23 @@
+import { jwtConstants } from '@app/constants/constant';
+import { TokenType } from '@app/constants/token-type';
+import { TokenPayloadDto } from '@app/dto/token.dto';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { TokenType } from 'src/constants/token-type';
-import { jwtConstants } from '../../constants/constant';
-import { TokenPayloadDto } from 'src/dto/token.dto';
 
 @Injectable()
 export class JwtTokenService {
   constructor(private jwtService: JwtService) {}
 
-  async createAuthToken(data: {
-    role: string;
-    username: string;
-  }): Promise<TokenPayloadDto> {
+  async createAuthToken(data: { role: string; username: string }): Promise<TokenPayloadDto> {
     return new TokenPayloadDto({
       accessToken: await this.jwtService.signAsync(
         {
           expiresIn: '3600s',
           username: data.username,
           type: TokenType.ACCESS_TOKEN,
-          role: data.role,
+          role: data.role
         },
-        { expiresIn: '3600s' },
+        { expiresIn: '3600s' }
       ),
 
       refreshToken: await this.jwtService.signAsync(
@@ -28,17 +25,14 @@ export class JwtTokenService {
           expiresIn: '86400s',
           username: data.username,
           type: TokenType.ACCESS_TOKEN,
-          role: data.role,
+          role: data.role
         },
-        { expiresIn: '86400s' },
-      ),
+        { expiresIn: '86400s' }
+      )
     });
   }
 
-  async getUserFromToken(data: {
-    accessToken: string;
-    refreshToken: string;
-  }): Promise<{
+  async getUserFromToken(data: { accessToken: string; refreshToken: string }): Promise<{
     user: null | {
       expiresIn: string;
       username: string;
@@ -50,12 +44,12 @@ export class JwtTokenService {
     if (!data?.refreshToken || !data?.accessToken) {
       return {
         user: null,
-        errorMessage: 'Missing refreshToken or accessToken',
+        errorMessage: 'Missing refreshToken or accessToken'
       };
     }
     try {
       const payload = await this.jwtService.verifyAsync(data.accessToken, {
-        secret: jwtConstants.secret,
+        secret: jwtConstants.secret
       });
 
       return { user: payload };
@@ -63,16 +57,19 @@ export class JwtTokenService {
       if (e.expiredAt) {
         try {
           const payload = await this.jwtService.verifyAsync(data.refreshToken, {
-            secret: jwtConstants.secret,
+            secret: jwtConstants.secret
           });
 
           return { user: payload };
-        } catch {}
+        } catch {
+          console.log('======== something wrong');
+        }
       }
     }
+
     return {
       user: null,
-      errorMessage: 'Something error when get user from token',
+      errorMessage: 'Something error when get user from token'
     };
   }
 }

@@ -1,9 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument } from 'mongoose';
 import { ROLE } from 'src/constants';
-import { RoleType } from 'src/constants/role-file';
-
-export type UserDocument = HydratedDocument<AdminEntity>;
 
 @Schema({ versionKey: false, timestamps: true })
 export class AdminEntity {
@@ -46,5 +43,6 @@ export class AdminEntity {
   // @Prop({ type: Types.ObjectId, ref: 'Manpower' })
   // manpowers: Types.ObjectId[];
 }
+export type UserDocument = HydratedDocument<AdminEntity>;
 
 export const AdminSchema = SchemaFactory.createForClass(AdminEntity);

@@ -1,13 +1,10 @@
-import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
+import { HttpStatus, UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
+
+import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './filters/http-exception.filter';
 import { HttpExceptionFilter } from './filters/bad-request.filter';
-import {
-  HttpStatus,
-  UnprocessableEntityException,
-  ValidationPipe,
-} from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,10 +13,7 @@ async function bootstrap() {
 
   const httpAdapterHost = app.get(HttpAdapterHost);
 
-  app.useGlobalFilters(
-    new AllExceptionsFilter(httpAdapterHost),
-    new HttpExceptionFilter(reflector),
-  );
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost), new HttpExceptionFilter(reflector));
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -27,8 +21,8 @@ async function bootstrap() {
       errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
       transform: true,
       dismissDefaultMessages: true,
-      exceptionFactory: (errors) => new UnprocessableEntityException(errors),
-    }),
+      exceptionFactory: (errors) => new UnprocessableEntityException(errors)
+    })
   );
 
   const config = new DocumentBuilder()

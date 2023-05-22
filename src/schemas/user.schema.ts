@@ -2,10 +2,9 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { now } from 'moment';
 import { HydratedDocument, Types } from 'mongoose';
 import { ROLE } from 'src/constants';
+
 import { AccountEntity } from './account.schema';
 import { RoomEntity } from './rooms.schema';
-
-export type UserDocument = HydratedDocument<UserEntity>;
 
 @Schema({ versionKey: false, timestamps: true })
 export class UserEntity {
@@ -63,5 +62,7 @@ export class UserEntity {
   // @Prop({ type: Types.ObjectId, ref: 'Manpower' })
   // manpowers: Types.ObjectId[];
 }
+
+export type UserDocument = HydratedDocument<UserEntity>;
 
 export const UserSchema = SchemaFactory.createForClass(UserEntity);

@@ -1,4 +1,4 @@
-interface UserInfoDto {
+export interface UserInfoDto {
   fullname: string;
   dateOfBirth: string;
   password: string;

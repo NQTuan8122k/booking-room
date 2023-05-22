@@ -1,3 +1,4 @@
+import { UserInfoDto } from '@app/dto/user/user.Info.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -10,31 +11,19 @@ import { AdminEntity } from 'src/schemas/admin.schema';
 export class AdminService {
   constructor(
     @InjectModel(AdminEntity.name)
-    private usersRepository: Model<UserDao>,
+    private usersRepository: Model<UserDao>
   ) {}
 
   async findAll(data: UserListQueryDto): Promise<UserInfoDto[]> {
     return await this.usersRepository.find({
-      ...(data?.username
-        ? { username: { $regex: data?.username, $options: 'i' } }
-        : {}),
-      ...(data?.address
-        ? { address: { $regex: data?.address, $options: 'i' } }
-        : {}),
-      ...(data?.createAt
-        ? { createAt: { $regex: data?.createAt, $options: 'i' } }
-        : {}),
-      ...(data?.dateOfBirth
-        ? { dateOfBirth: { $regex: data?.dateOfBirth, $options: 'i' } }
-        : {}),
+      ...(data?.username ? { username: { $regex: data?.username, $options: 'i' } } : {}),
+      ...(data?.address ? { address: { $regex: data?.address, $options: 'i' } } : {}),
+      ...(data?.createAt ? { createAt: { $regex: data?.createAt, $options: 'i' } } : {}),
+      ...(data?.dateOfBirth ? { dateOfBirth: { $regex: data?.dateOfBirth, $options: 'i' } } : {}),
       ...(data?.email ? { email: { $regex: data?.email, $options: 'i' } } : {}),
-      ...(data?.fullname
-        ? { fullname: { $regex: data?.fullname, $options: 'i' } }
-        : {}),
-      ...(data?.phoneNumber
-        ? { phoneNumber: { $regex: data?.phoneNumber, $options: 'i' } }
-        : {}),
-      ...(data?.role ? { role: { $regex: data?.role, $options: 'i' } } : {}),
+      ...(data?.fullname ? { fullname: { $regex: data?.fullname, $options: 'i' } } : {}),
+      ...(data?.phoneNumber ? { phoneNumber: { $regex: data?.phoneNumber, $options: 'i' } } : {}),
+      ...(data?.role ? { role: { $regex: data?.role, $options: 'i' } } : {})
     });
   }
 

@@ -8,41 +8,23 @@ export class AdminEntity {
   fullname: string;
 
   @Prop()
-  dateOfBirth: string;
-
-  @Prop()
   password: string;
 
   @Prop({ required: true, index: true })
   username: string;
 
-  @Prop()
-  phoneNumber: string;
-
-  @Prop()
-  email: string;
-
-  @Prop()
-  address: string;
-
   @Prop({ default: 'Active' })
   status: string;
 
   @Prop()
-  createAt: string;
+  createAt: Date;
 
   @Prop({ default: null })
-  lastModify: string | null;
+  lastModify: Date | null;
 
-  @Prop({ default: ROLE.USER })
+  @Prop({ default: ROLE.ADMIN })
   role: string;
-
-  @Prop()
-  avatarUrl: string;
-
-  // @Prop({ type: Types.ObjectId, ref: 'Manpower' })
-  // manpowers: Types.ObjectId[];
 }
-export type UserDocument = HydratedDocument<AdminEntity>;
+export type AdminDocument = HydratedDocument<AdminEntity>;
 
 export const AdminSchema = SchemaFactory.createForClass(AdminEntity);

@@ -68,7 +68,6 @@ export class UserService {
         createAt,
         lastModify,
         role,
-        createdAt,
         updatedAt
       } = user;
 
@@ -92,7 +91,6 @@ export class UserService {
           createAt,
           lastModify,
           role,
-          createdAt,
           updatedAt
         }
       };

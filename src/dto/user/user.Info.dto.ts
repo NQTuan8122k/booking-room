@@ -10,6 +10,5 @@ export interface UserInfoDto {
   createAt: string;
   lastModify: string;
   role: string;
-  createdAt: string;
   updatedAt: string;
 }

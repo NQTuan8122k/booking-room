@@ -3,9 +3,10 @@ import * as bcrypt from 'bcrypt';
 import { JwtTokenService } from '@app/shared/services/JwtTokenService.service';
 import { UserLoginRequestDto } from '@app/dto/auth/login.dto';
 import { UserRepository } from '@app/repo/user.repository';
+import { ResponseUserAuthDto } from '@app/dto/user/respone.login.dto';
 
 @Injectable()
-export class AuthLoginService {
+export class UserLoginService {
   constructor(private readonly userRepository: UserRepository, private jwtTokenService: JwtTokenService) {}
 
   async login(loginData: UserLoginRequestDto) {
@@ -21,7 +22,9 @@ export class AuthLoginService {
         role: userInfo.role
       });
 
-      return { data: userInfo, token };
+      const responseData = new ResponseUserAuthDto(userInfo);
+
+      return { data: responseData, token };
     }
     if (!userInfo?.username) {
       throw new HttpException(

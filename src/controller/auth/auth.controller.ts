@@ -1,13 +1,13 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Response } from '@nestjs/common';
 import { UserLoginRequestDto } from 'src/dto/auth/login.dto';
-import { AuthLoginService } from 'src/services/auth/auth.login.Service';
-import { AuthSignupService } from 'src/services/auth/auth.signup.Service';
 
 import { UserRegisterDto } from '../../dto/user/user.dto';
+import { UserLoginService } from '@app/services/auth/user.login.Service';
+import { UserSignupService } from '@app/services/auth/user.signup.Service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authSignupService: AuthSignupService, private authLoginService: AuthLoginService) {}
+  constructor(private userSignupService: UserSignupService, private userLoginService: UserLoginService) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
@@ -16,7 +16,7 @@ export class AuthController {
     @Body()
     loginData: UserLoginRequestDto
   ) {
-    const responseData = await this.authLoginService.login({
+    const responseData = await this.userLoginService.login({
       ...loginData
     });
 
@@ -34,7 +34,7 @@ export class AuthController {
 
   @Post('signup')
   async create(@Response() response, @Body() signupData: UserRegisterDto) {
-    const user = await this.authSignupService.signup(signupData);
+    const user = await this.userSignupService.signup(signupData);
     response.status(HttpStatus.CREATED).json({
       request_id: 'string',
       status: 201,

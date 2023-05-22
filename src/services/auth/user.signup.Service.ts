@@ -4,9 +4,10 @@ import * as bcrypt from 'bcrypt';
 import { UserRegisterDto } from '../../dto/user/user.dto';
 import { UserRepository } from '../../repo/user.repository';
 import { ROLE } from '../../constants';
+import { ResponseUserAuthDto } from '@app/dto/user/respone.login.dto';
 
 @Injectable()
-export class AuthSignupService {
+export class UserSignupService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async signup(signupData: UserRegisterDto) {
@@ -47,7 +48,8 @@ export class AuthSignupService {
     });
 
     if (signupUser.username) {
-      return signupUser;
+      const responseData = new ResponseUserAuthDto(signupUser);
+      return responseData;
     }
 
     throw new HttpException(

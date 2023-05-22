@@ -33,7 +33,7 @@ export class UserController {
       });
     }
   }
-
+  login;
   @UseGuards(AuthenticationGuard)
   @Post('userInfo')
   @Roles(ROLE.USER, ROLE.ADMIN, ROLE.PROVIDER)
@@ -72,7 +72,6 @@ export class UserController {
         createAt,
         lastModify,
         role,
-        createdAt,
         updatedAt
       } = user;
 
@@ -96,7 +95,6 @@ export class UserController {
           createAt,
           lastModify,
           role,
-          createdAt,
           updatedAt
         }
       });
@@ -185,7 +183,6 @@ export class UserController {
         createAt,
         lastModify,
         role,
-        createdAt,
         updatedAt
       } = user;
 
@@ -209,7 +206,6 @@ export class UserController {
           createAt,
           lastModify,
           role,
-          createdAt,
           updatedAt
         }
       });

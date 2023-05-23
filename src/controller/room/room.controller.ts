@@ -1,5 +1,6 @@
 import { CreateRoomDto } from '@app/dto/room/create.room.dto';
-import { RoomService } from '@app/services/room/room.service';
+import { RoomCreationService } from '@app/services/room/room.create.service';
+import { RoomUpdateService } from '@app/services/room/room.update.service';
 import { Body, Controller, HttpStatus, Post, Response, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ROLE } from 'src/constants';
@@ -11,24 +12,42 @@ import { JwtTokenService } from 'src/shared/services/JwtTokenService.service';
 @ApiTags('rooms')
 @Controller('rooms')
 export class RoomController {
-  constructor(private readonly roomService: RoomService, private jwtTokenService: JwtTokenService) {}
+  constructor(
+    private readonly roomCreationService: RoomCreationService,
+    private readonly roomUpdateService: RoomUpdateService
+  ) {}
 
   @UseGuards(AuthenticationGuard)
   @Post('new')
   async createNewRoom(@Response() response, @Body() roomInfo: CreateRoomDto) {
-    const res = { status: 1123 };
-    if (res.status === 200) {
-      response.status(HttpStatus.OK).json({
-        ...res
-      });
-    } else if (res.status === 400) {
-      response.status(HttpStatus.BAD_REQUEST).json({
-        ...res
-      });
-    } else {
-      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        ...res
-      });
-    }
+    const { data, accessToken, refreshToken } = roomInfo;
+    const res = this.roomCreationService.createNewRoom(data, { accessToken, refreshToken });
+
+    response.status(HttpStatus.CREATED).json({
+      request_id: 'string',
+      status: 201,
+      response_code: 'ROOM_200',
+      response_message: 'Create success',
+      response_description: 'Create new room success',
+      request_date_time: new Date().toISOString(),
+      data: res
+    });
+  }
+
+  @UseGuards(AuthenticationGuard)
+  @Post('update')
+  async updateRoom(@Response() response, @Body() roomInfo: CreateRoomDto) {
+    const { data, accessToken, refreshToken } = roomInfo;
+    const res = this.roomUpdateService.updateNewRoom(data, { accessToken, refreshToken });
+
+    response.status(HttpStatus.CREATED).json({
+      request_id: 'string',
+      status: 201,
+      response_code: 'ROOM_200',
+      response_message: 'Create success',
+      response_description: 'Create new room success',
+      request_date_time: new Date().toISOString(),
+      data: res
+    });
   }
 }

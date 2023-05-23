@@ -14,7 +14,7 @@ export class UserLoginService {
       username: loginData.username
     });
 
-    const isMatchPassword = await bcrypt.compare(loginData.password, userInfo?.password);
+    const isMatchPassword = !!userInfo && (await bcrypt?.compare?.(loginData.password, userInfo?.password));
 
     if (!!userInfo?.username && userInfo?.username == loginData.username && isMatchPassword && !!userInfo?.password) {
       const token = await this.jwtTokenService.createAuthToken({
@@ -26,6 +26,7 @@ export class UserLoginService {
 
       return { data: responseData, token };
     }
+
     if (!userInfo?.username) {
       throw new HttpException(
         {

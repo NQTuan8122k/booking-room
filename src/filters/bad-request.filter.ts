@@ -10,9 +10,9 @@ export class HttpExceptionFilter implements ExceptionFilter<UnprocessableEntityE
 
   catch(exception: UnprocessableEntityException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
+    const response = ctx.getResponse<Response>?.();
     const statusCode = exception.getStatus();
-    const r = exception.getResponse() as { message: ValidationError[] };
+    const r = exception?.getResponse() as { message: ValidationError[] };
     console.log('exception****exception bad-request', exception);
 
     // const validationErrors = r.message;

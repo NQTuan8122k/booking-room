@@ -34,7 +34,7 @@ export class AuthController {
     responseDto.access_token = responseData.token.accessToken;
     responseDto.refresh_token = responseData.token.refreshToken;
     responseDto.data = responseData.data;
-    return response.status(HttpStatus.OK).body(responseDto);
+    return response.status(HttpStatus.OK).json(responseDto);
   }
 
   @Post('signup')

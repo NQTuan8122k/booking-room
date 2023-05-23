@@ -4,6 +4,9 @@ import { UserLoginRequestDto } from 'src/dto/auth/login.dto';
 import { UserRegisterDto } from '../../dto/user/user.dto';
 import { UserLoginService } from '@app/services/auth/user.login.Service';
 import { UserSignupService } from '@app/services/auth/user.signup.Service';
+import { BaseResponseDto } from '@app/controller/BaseResponseDto';
+import { ResponseUserAuthDto } from '@app/dto/user/respone.login.dto';
+import { ApiOkResponse } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -11,25 +14,27 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
+  @ApiOkResponse({ type: BaseResponseDto })
   async signIn(
     @Response() response,
     @Body()
     loginData: UserLoginRequestDto
-  ) {
+  ): Promise<BaseResponseDto<ResponseUserAuthDto>> {
     const responseData = await this.userLoginService.login({
       ...loginData
     });
 
-    return response.status(HttpStatus.OK).json({
-      request_id: 'string',
-      status: 200,
-      response_code: 'LOGIN_200',
-      response_message: 'Login success',
-      response_description: 'Login success',
-      request_date_time: new Date().toISOString(),
-      ...responseData.token,
-      data: responseData.data
-    });
+    const responseDto = new BaseResponseDto<ResponseUserAuthDto>();
+    responseDto.request_id = 'string';
+    responseDto.status = 200;
+    responseDto.response_code = 'LOGIN_200';
+    responseDto.response_message = 'Login Succes';
+    responseDto.response_description = 'Login Succes';
+    responseDto.request_date_time = new Date();
+    responseDto.access_token = responseData.token.accessToken;
+    responseDto.refresh_token = responseData.token.refreshToken;
+    responseDto.data = responseData.data;
+    return response.status(HttpStatus.OK).body(responseDto);
   }
 
   @Post('signup')

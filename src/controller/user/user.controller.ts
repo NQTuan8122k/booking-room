@@ -33,7 +33,7 @@ export class UserController {
       });
     }
   }
-  login;
+
   @UseGuards(AuthenticationGuard)
   @Post('userInfo')
   @Roles(ROLE.USER, ROLE.ADMIN, ROLE.PROVIDER)

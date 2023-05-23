@@ -37,9 +37,6 @@ export class AccountEntity {
 
   @Prop()
   session_state: string;
-
-  @Prop({ type: Types.ObjectId, ref: UserEntity.name })
-  user: Types.ObjectId;
 }
 
 export type UserDocument = HydratedDocument<AccountEntity>;

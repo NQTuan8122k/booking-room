@@ -58,9 +58,6 @@ export class UserEntity {
 
   @Prop({ type: Types.ObjectId, ref: 'Manpower' })
   favoriteIds: Types.ObjectId[];
-
-  // @Prop({ type: Types.ObjectId, ref: 'Manpower' })
-  // manpowers: Types.ObjectId[];
 }
 
 export type UserDocument = HydratedDocument<UserEntity>;

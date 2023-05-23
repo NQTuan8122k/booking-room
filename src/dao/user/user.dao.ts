@@ -21,7 +21,6 @@ export class UserDao {
     this.password = props.password || null;
     this.username = props.username || null;
     this.phoneNumber = props.phoneNumber || null;
-    this.email = props.email || null;
     this.address = props.address || null;
     this.status = props.status || null;
     this.createAt = props.createAt || null;

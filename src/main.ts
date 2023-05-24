@@ -37,5 +37,10 @@ async function bootstrap() {
 
   await app.listen(3030);
   console.info(`server running on ${await app.getUrl()}`);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 void bootstrap();

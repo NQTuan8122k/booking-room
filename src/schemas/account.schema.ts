@@ -18,10 +18,10 @@ export class AccountEntity {
   providerAccountId: string;
 
   @Prop()
-  refresh_token: string;
+  refreshToken: string;
 
   @Prop()
-  access_token: string;
+  accessToken: string;
 
   @Prop()
   expires_at: number;

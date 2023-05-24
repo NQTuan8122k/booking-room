@@ -1,7 +1,8 @@
-import { IsNotEmpty } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 
 export class RoomInterface {
-  // _id: Types.ObjectId;
   @IsNotEmpty({ message: 'Hotel Id is required' })
   hotelId: string;
 
@@ -40,12 +41,24 @@ export class RoomInterface {
 }
 
 export class CreateRoomDto {
+  @ApiProperty()
   @IsNotEmpty({ message: 'Access Token is required' })
   accessToken: string;
 
+  @ApiProperty()
   @IsNotEmpty({ message: 'Refresh Token is required' })
   refreshToken: string;
 
+  @ApiProperty()
   @IsNotEmpty({ message: 'Missing Data field' })
+  @Type(() => RoomInterface)
+  @ValidateNested({
+    each: true
+  })
   data: RoomInterface;
 }
+
+// export class CreateRoomDto extends BatchDto<RoomInterface> {
+//   @Type(() => RoomInterface)
+//   data: RoomInterface;
+// }

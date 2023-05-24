@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtTokenService } from '@app/shared/services/JwtTokenService.service';
 import { UserLoginRequestDto } from '@app/dto/auth/login.dto';
 import { UserRepository } from '@app/repo/user.repository';
-import { ResponseUserAuthDto } from '@app/dto/user/respone.login.dto';
+import { ResponseUserAuthDto } from '@app/dto/user/response.login.dto';
 
 @Injectable()
 export class UserLoginService {

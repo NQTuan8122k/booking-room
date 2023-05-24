@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
+
+class dataInfo {
+  @ApiProperty()
+  @IsNotEmpty({ message: 'username is required' })
+  username: string;
+}
 
 export class QueryUserInfoDto {
   @ApiProperty()
@@ -12,7 +19,9 @@ export class QueryUserInfoDto {
 
   @ApiProperty()
   @IsNotEmpty({ message: 'Missing data field' })
-  data: {
-    username: string;
-  };
+  @Type(() => dataInfo)
+  @ValidateNested({
+    each: true
+  })
+  data: dataInfo;
 }

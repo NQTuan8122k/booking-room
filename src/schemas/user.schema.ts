@@ -33,7 +33,7 @@ export class UserEntity {
   status: string;
 
   @Prop({ default: now() })
-  createAt: Date;
+  createAt: string;
 
   @Prop({ default: null })
   lastModify: Date | null;

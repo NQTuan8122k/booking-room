@@ -1,51 +1,74 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { RoleType } from 'src/constants/role-file';
 
 export class UserDataDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
   fullname?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   dateOfBirth?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   username?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   phoneNumber?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   email?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   address?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   createAt?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   role?: RoleType;
 }
 
-export interface UserListQueryDto {
+export class UserListQueryDto {
+  @ApiPropertyOptional()
   fullname?: string;
+
+  @ApiPropertyOptional()
   dateOfBirth?: string;
+
+  @ApiPropertyOptional()
   username?: string;
+
+  @ApiPropertyOptional()
   phoneNumber?: string;
+
+  @ApiPropertyOptional()
   email?: string;
+
+  @ApiPropertyOptional()
   address?: string;
+
+  @ApiPropertyOptional()
   createAt?: string;
+
+  @ApiPropertyOptional()
   role?: RoleType;
 }
 
 export class QueryListUerDto {
+  @ApiProperty()
   @IsNotEmpty({ message: 'AccessToken is required' })
   accessToken: string;
 
+  @ApiProperty()
   @IsNotEmpty({ message: 'AccessToken is required' })
   refreshToken: string;
 
+  @ApiProperty()
   @IsNotEmpty({ message: 'Missing Data field' })
+  @Type(() => UserDataDto)
+  @ValidateNested({
+    each: true
+  })
   data: UserDataDto;
 }

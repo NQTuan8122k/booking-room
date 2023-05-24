@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, Length, MaxLength, MinLength } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsEmail, IsNotEmpty, Length, MaxLength, MinLength, ValidateNested } from 'class-validator';
 
 export class DataDto {
   @ApiProperty()
@@ -34,12 +35,19 @@ export class DataDto {
 }
 
 export class AdminRegisterDto {
+  @ApiProperty()
   @IsNotEmpty({ message: 'AccessToken is required' })
   accessToken: string;
 
+  @ApiProperty()
   @IsNotEmpty({ message: 'AccessToken is required' })
   refreshToken: string;
 
+  @ApiProperty()
   @IsNotEmpty({ message: 'Missing Data field' })
+  @Type(() => DataDto)
+  @ValidateNested({
+    each: true
+  })
   data: DataDto;
 }

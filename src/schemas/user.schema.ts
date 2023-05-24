@@ -33,7 +33,7 @@ export class UserEntity {
   status: string;
 
   @Prop({ default: now() })
-  createAt: Date;
+  createAt: string;
 
   @Prop({ default: null })
   lastModify: Date | null;
@@ -58,9 +58,6 @@ export class UserEntity {
 
   @Prop({ type: Types.ObjectId, ref: 'Manpower' })
   favoriteIds: Types.ObjectId[];
-
-  // @Prop({ type: Types.ObjectId, ref: 'Manpower' })
-  // manpowers: Types.ObjectId[];
 }
 
 export type UserDocument = HydratedDocument<UserEntity>;

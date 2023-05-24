@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class BaseResponseDto<T> {
   @ApiProperty()
@@ -19,11 +19,12 @@ export class BaseResponseDto<T> {
   @ApiProperty()
   request_date_time: Date;
 
-  @ApiProperty()
-  access_token: string;
+  @ApiPropertyOptional()
+  accessToken?: string;
+
+  @ApiPropertyOptional()
+  refreshToken?: string;
 
   @ApiProperty()
-  refresh_token: string;
-
   data: T;
 }

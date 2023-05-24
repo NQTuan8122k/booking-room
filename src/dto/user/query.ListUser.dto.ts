@@ -1,51 +1,83 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty } from 'class-validator';
+import { OptionalProperty } from '@app/shared/utils/validation/decorator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { RoleType } from 'src/constants/role-file';
 
 export class UserDataDto {
-  @ApiProperty()
+  @ApiPropertyOptional()
   fullname?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   dateOfBirth?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   username?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   phoneNumber?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   email?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   address?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   createAt?: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   role?: RoleType;
 }
 
-export interface UserListQueryDto {
+export class UserListQueryDto {
+  @ApiPropertyOptional()
+  @OptionalProperty()
   fullname?: string;
+
+  @ApiPropertyOptional()
+  @OptionalProperty()
   dateOfBirth?: string;
+
+  @ApiPropertyOptional()
+  @OptionalProperty()
   username?: string;
+
+  @ApiPropertyOptional()
+  @OptionalProperty()
   phoneNumber?: string;
+
+  @ApiPropertyOptional()
+  @OptionalProperty()
   email?: string;
+
+  @ApiPropertyOptional()
+  @OptionalProperty()
   address?: string;
+
+  @ApiPropertyOptional()
+  @OptionalProperty()
   createAt?: string;
+
+  @ApiPropertyOptional()
+  @OptionalProperty()
   role?: RoleType;
 }
 
 export class QueryListUerDto {
+  @ApiProperty()
   @IsNotEmpty({ message: 'AccessToken is required' })
   accessToken: string;
 
+  @ApiProperty()
   @IsNotEmpty({ message: 'AccessToken is required' })
   refreshToken: string;
 
+  @ApiProperty()
   @IsNotEmpty({ message: 'Missing Data field' })
+  @Type(() => UserDataDto)
+  @ValidateNested({
+    each: true
+  })
   data: UserDataDto;
 }

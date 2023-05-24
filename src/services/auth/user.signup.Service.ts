@@ -4,13 +4,15 @@ import * as bcrypt from 'bcrypt';
 import { UserRegisterDto } from '../../dto/user/user.dto';
 import { UserRepository } from '../../repo/user.repository';
 import { ROLE } from '../../constants';
-import { ResponseUserAuthDto } from '@app/dto/user/respone.login.dto';
+import { ResponseUserAuthDto } from '@app/dto/user/response.login.dto';
 
 @Injectable()
 export class UserSignupService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async signup(signupData: UserRegisterDto) {
+    console.log('======1213123');
+
     const user = await this.userRepository.findOne({
       username: signupData.username
     });

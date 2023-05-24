@@ -32,6 +32,33 @@ export class JwtTokenService {
     });
   }
 
+  async generationNewToken(data: { accessToken: string; refreshToken: string }): Promise<TokenPayloadDto> {
+    try {
+      const payload = await this.jwtService.verifyAsync(data.accessToken, {
+        secret: jwtConstants.secret
+      });
+
+      return await this.createAuthToken(payload);
+    } catch (e) {
+      if (e.expiredAt) {
+        try {
+          const payload = await this.jwtService.verifyAsync(data.refreshToken, {
+            secret: jwtConstants.secret
+          });
+
+          return await this.createAuthToken(payload);
+        } catch {
+          console.log('======== something wrong');
+        }
+      }
+    }
+
+    return {
+      accessToken: null,
+      refreshToken: null
+    };
+  }
+
   async getUserFromToken(data: { accessToken: string; refreshToken: string }): Promise<{
     user: null | {
       expiresIn: string;

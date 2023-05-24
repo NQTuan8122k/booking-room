@@ -18,10 +18,10 @@ export class AccountEntity {
   providerAccountId: string;
 
   @Prop()
-  refresh_token: string;
+  refreshToken: string;
 
   @Prop()
-  access_token: string;
+  accessToken: string;
 
   @Prop()
   expires_at: number;
@@ -37,9 +37,6 @@ export class AccountEntity {
 
   @Prop()
   session_state: string;
-
-  @Prop({ type: Types.ObjectId, ref: UserEntity.name })
-  user: Types.ObjectId;
 }
 
 export type UserDocument = HydratedDocument<AccountEntity>;

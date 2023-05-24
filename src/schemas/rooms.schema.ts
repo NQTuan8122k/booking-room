@@ -2,10 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Types } from 'mongoose';
 import { now } from 'moment';
 
-import { UserEntity } from './user.schema';
-
 @Schema({ versionKey: false, timestamps: true })
 export class RoomEntity {
+  @Prop()
+  hotelId: Types.ObjectId;
+
   @Prop()
   title: string;
 
@@ -13,32 +14,32 @@ export class RoomEntity {
   description: string;
 
   @Prop()
-  imageSrc: string;
+  imageSrc: string[];
 
   @Prop({ default: now() })
-  createdAt: Date;
+  createdAt: string;
 
   @Prop()
   category: string;
 
   @Prop()
-  roomCount: number;
+  roomCount: string;
 
   @Prop()
-  bathroomCount: number;
+  bathroomCount: string;
 
   @Prop()
-  guestCount: number;
+  guestCount: string;
 
   @Prop()
   locationValue: string;
 
   @Prop()
-  price: number;
+  price: string;
 
-  @Prop({ type: Types.ObjectId, ref: UserEntity.name })
-  user: Types.ObjectId;
+  @Prop()
+  updateAt: string;
 }
-export type UserDocument = HydratedDocument<RoomEntity>;
+export type RoomDocument = HydratedDocument<RoomEntity>;
 
-export const AccountSchema = SchemaFactory.createForClass(RoomEntity);
+export const RoomSchema = SchemaFactory.createForClass(RoomEntity);

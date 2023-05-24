@@ -9,6 +9,7 @@ import { RolesGuard } from './guards/roles.guard';
 import { AuthModule } from './modules/auth.module';
 import { RoomModule } from './modules/room.module';
 import { UserModule } from './modules/user.module';
+import { HotelModule } from './modules/hotel.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { UserModule } from './modules/user.module';
     MongooseModule.forRoot('mongodb+srv://root:password1289@cluster0.e8zxjw8.mongodb.net/booking'),
     UserModule,
     AuthModule,
-    RoomModule
+    RoomModule,
+    HotelModule
   ],
   controllers: [AppController],
   providers: [

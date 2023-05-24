@@ -14,21 +14,21 @@ export class AuthenticationGuard implements CanActivate {
     const token = {} as TokenPayloadDto;
 
     //get Token from http request header
-    const headerObjKeyList = Object.keys(request.rawHeaders);
-    for (let i = 0; i < headerObjKeyList.length; i = i + 2) {
-      const key = request.rawHeaders[headerObjKeyList[i]];
-      const value = request.rawHeaders[headerObjKeyList[i + 1]];
+    const headerObjKeyList = Object.keys(request?.rawHeaders || {});
+    for (let i = 0; i < headerObjKeyList?.length; i = i + 2) {
+      const key = request?.rawHeaders[headerObjKeyList[i]];
+      const value = request?.rawHeaders[headerObjKeyList[i + 1]];
 
       token[key] = value;
     }
 
     // get Token from request body
-    if (!!request.body?.accessToken) {
-      token.refreshToken = request.body?.accessToken;
+    if (!!request?.body?.accessToken) {
+      token.refreshToken = request?.body?.accessToken;
     }
 
-    if (!!request.body?.refreshToken) {
-      token.refreshToken = request.body?.refreshToken;
+    if (!!request?.body?.refreshToken) {
+      token.refreshToken = request?.body?.refreshToken;
     }
 
     if (!token?.refreshToken || !token?.accessToken) {

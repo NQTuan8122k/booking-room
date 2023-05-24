@@ -5,7 +5,7 @@ import { now } from 'moment';
 @Schema({ versionKey: false, timestamps: true })
 export class RoomEntity {
   @Prop()
-  hotel: Types.ObjectId;
+  hotelId: Types.ObjectId;
 
   @Prop()
   title: string;
@@ -17,25 +17,28 @@ export class RoomEntity {
   imageSrc: string[];
 
   @Prop({ default: now() })
-  createdAt: Date;
+  createdAt: string;
 
   @Prop()
   category: string;
 
   @Prop()
-  roomCount: number;
+  roomCount: string;
 
   @Prop()
-  bathroomCount: number;
+  bathroomCount: string;
 
   @Prop()
-  guestCount: number;
+  guestCount: string;
 
   @Prop()
   locationValue: string;
 
   @Prop()
-  price: number;
+  price: string;
+
+  @Prop()
+  updateAt: string;
 }
 export type RoomDocument = HydratedDocument<RoomEntity>;
 

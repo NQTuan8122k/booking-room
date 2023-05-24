@@ -22,3 +22,20 @@ export function UserRoleMatch(property: string[], validationOptions?: Validation
     });
   };
 }
+
+export function OptionalProperty() {
+  return (object: object, propertyName: string): void => {
+    registerDecorator({
+      target: object.constructor,
+      propertyName,
+      validator: {
+        validate() {
+          return true;
+        },
+        defaultMessage: () => {
+          return `User role must be ${RoleType.USER} or ${RoleType.PROVIDER}`;
+        }
+      }
+    });
+  };
+}

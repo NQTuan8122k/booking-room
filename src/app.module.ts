@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
 
-import { AppService } from './app.service';
 import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { RolesGuard } from './guards/roles.guard';
 import { AuthModule } from './modules/auth.module';
-import { UserModule } from './modules/user.module';
 import { RoomModule } from './modules/room.module';
+import { UserModule } from './modules/user.module';
 
 @Module({
   imports: [

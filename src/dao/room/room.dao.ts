@@ -6,13 +6,16 @@ export class RoomDao {
   title: string;
   description: string;
   imageSrc: string[];
-  createdAt: Date;
+  createdAt: string;
   category: string;
-  roomCount: number;
-  bathroomCount: number;
-  guestCount: number;
+  roomCount: string;
+  bathroomCount: string;
+  guestCount: string;
   locationValue: string;
-  price: number;
+  price: string;
+  updateAt: string;
+  bed: string;
+  bedType: string;
 
   constructor(props: Partial<RoomDao>) {
     this._id = props._id;
@@ -27,5 +30,8 @@ export class RoomDao {
     this.guestCount = props.guestCount || null;
     this.locationValue = props.locationValue || null;
     this.price = props.price || null;
+    this.updateAt = props.updateAt || null;
+    this.bed = props.bed || null;
+    this.bedType = props.bedType || null;
   }
 }

@@ -1,3 +1,4 @@
+import { TokenPayloadDto } from '@app/dto/token.dto';
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
@@ -15,11 +16,30 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
 
     const getToken = async (request) => {
-      const token = request.body;
+      const token = {} as TokenPayloadDto;
+
+      //get Token from http request header
+      const headerObjKeyList = Object.keys(request?.rawHeaders || {});
+      for (let i = 0; i < headerObjKeyList?.length; i = i + 2) {
+        const key = request?.rawHeaders[headerObjKeyList[i]];
+        const value = request?.rawHeaders[headerObjKeyList[i + 1]];
+
+        token[key] = value;
+      }
+
+      // get Token from request body
+      if (!!request?.body?.accessToken) {
+        token.refreshToken = request?.body?.accessToken;
+      }
+
+      if (!!request?.body?.refreshToken) {
+        token.refreshToken = request?.body?.refreshToken;
+      }
 
       if (!token?.refreshToken || !token?.accessToken) {
         return await request;
       }
+
       try {
         const payload = await this.jwtService.verifyAsync(token.refreshToken, {
           secret: jwtConstants.secret

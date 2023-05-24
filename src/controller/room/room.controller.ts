@@ -1,12 +1,14 @@
-import { CreateRoomDto, RoomInterface } from '@app/dto/room/create.room.dto';
+import { CreateRoomDto } from '@app/dto/room/create.room.dto';
+import { UpdateRoomDto } from '@app/dto/room/update.room.dto';
+import { TokenPayloadDto } from '@app/dto/token.dto';
 import { RoomCreationService } from '@app/services/room/room.create.service';
 import { RoomUpdateService } from '@app/services/room/room.update.service';
-import { Body, Controller, HttpStatus, Post, Response, UseGuards } from '@nestjs/common';
+import { Body, Controller, Headers, HttpStatus, Post, Put, Response, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ROLE } from 'src/constants';
-import { Roles } from 'src/decorators/roles.decorator';
 import { AuthenticationGuard } from 'src/guards/authentication.guard';
 import { BaseResponseDto } from '../BaseResponseDto';
+import { ROLE } from '@app/constants';
+import { Roles } from '@app/decorators/roles.decorator';
 
 @ApiTags('rooms')
 @Controller('rooms')
@@ -17,10 +19,12 @@ export class RoomController {
   ) {}
 
   @UseGuards(AuthenticationGuard)
+  @Roles(ROLE.PROVIDER)
   @Post('new')
-  async createNewRoom(@Response() response, @Body() roomInfo: CreateRoomDto) {
-    const { data, accessToken, refreshToken } = roomInfo;
-    const { data: responseData, token: newToken } = await this.roomCreationService.createNewRoom(data, {
+  async createNewRoom(@Response() response, @Headers() header: TokenPayloadDto, @Body() roomInfo: CreateRoomDto) {
+    const { accessToken, refreshToken } = header;
+
+    const { data: responseData, token: newToken } = await this.roomCreationService.createNewRoom(roomInfo, {
       accessToken,
       refreshToken
     });
@@ -38,11 +42,13 @@ export class RoomController {
     return response.status(HttpStatus.OK).json(responseDto);
   }
 
-  // @UseGuards(AuthenticationGuard)
-  @Post('update')
-  async updateRoom(@Response() response, @Body() roomInfo: CreateRoomDto) {
-    const { data, accessToken, refreshToken } = roomInfo;
-    const { data: responseData, token: newToken } = await this.roomUpdateService.updateNewRoom(data, {
+  @UseGuards(AuthenticationGuard)
+  @Roles(ROLE.PROVIDER)
+  @Put('update')
+  async updateRoom(@Response() response, @Headers() header: TokenPayloadDto, @Body() roomInfo: UpdateRoomDto) {
+    const { accessToken, refreshToken } = header;
+
+    const { data: responseData, token: newToken } = await this.roomUpdateService.updateNewRoom(roomInfo, {
       accessToken,
       refreshToken
     });

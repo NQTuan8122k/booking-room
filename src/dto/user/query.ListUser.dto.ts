@@ -1,3 +1,4 @@
+import { OptionalProperty } from '@app/shared/utils/validation/decorator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
@@ -31,27 +32,35 @@ export class UserDataDto {
 
 export class UserListQueryDto {
   @ApiPropertyOptional()
+  @OptionalProperty()
   fullname?: string;
 
   @ApiPropertyOptional()
+  @OptionalProperty()
   dateOfBirth?: string;
 
   @ApiPropertyOptional()
+  @OptionalProperty()
   username?: string;
 
   @ApiPropertyOptional()
+  @OptionalProperty()
   phoneNumber?: string;
 
   @ApiPropertyOptional()
+  @OptionalProperty()
   email?: string;
 
   @ApiPropertyOptional()
+  @OptionalProperty()
   address?: string;
 
   @ApiPropertyOptional()
+  @OptionalProperty()
   createAt?: string;
 
   @ApiPropertyOptional()
+  @OptionalProperty()
   role?: RoleType;
 }
 

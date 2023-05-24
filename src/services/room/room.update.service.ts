@@ -1,4 +1,5 @@
-import { RoomInterface } from '@app/dto/room/create.room.dto';
+import { CreateRoomDto } from '@app/dto/room/create.room.dto';
+import { UpdateRoomDto } from '@app/dto/room/update.room.dto';
 import { TokenPayloadDto } from '@app/dto/token.dto';
 import { RoomRepository } from '@app/repo/room.repository';
 import { JwtTokenService } from '@app/shared/services/JwtTokenService.service';
@@ -8,8 +9,38 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 export class RoomUpdateService {
   constructor(private roomRepository: RoomRepository, private jwtTokenService: JwtTokenService) {}
 
-  async updateNewRoom(room: RoomInterface, token: TokenPayloadDto) {
-    const roomResponse = await this.roomRepository.create(room);
+  async updateNewRoom(room: UpdateRoomDto, token: TokenPayloadDto) {
+    const {
+      bathroomCount,
+      bed,
+      bedType,
+      category,
+      description,
+      guestCount,
+      hotelId,
+      imageSrc,
+      locationValue,
+      price,
+      roomCount,
+      _id
+      // roomNo
+    } = room;
+
+    const dataUpdate = {
+      ...(bathroomCount ? { bathroomCount } : {}),
+      ...(bed ? { bed } : {}),
+      ...(bedType ? { bedType } : {}),
+      ...(category ? { category } : {}),
+      ...(description ? { description } : {}),
+      ...(guestCount ? { guestCount } : {}),
+      ...(hotelId ? { hotelId } : {}),
+      ...(imageSrc ? { imageSrc } : {}),
+      ...(locationValue ? { locationValue } : {}),
+      ...(price ? { price } : {}),
+      ...(roomCount ? { roomCount } : {})
+    } as UpdateRoomDto;
+
+    const roomResponse = await this.roomRepository.updateOne(_id, dataUpdate);
 
     if (!!roomResponse?._id) {
       const newToken = await this.jwtTokenService.generationNewToken(token);

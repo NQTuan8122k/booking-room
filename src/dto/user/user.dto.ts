@@ -1,7 +1,7 @@
 import { RoleType } from '@app/constants/role-file';
-import { UserRoleMatch } from '@app/shared/utils/validation/decorator';
+import { OptionalProperty, UserRoleMatch } from '@app/shared/utils/validation/decorator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsString, Length, MaxLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class UserRegisterDto {
   @ApiProperty()
@@ -46,6 +46,7 @@ export class UserRegisterDto {
   address: string;
 
   @ApiPropertyOptional()
+  @OptionalProperty()
   createAt?: string;
 
   @ApiProperty()

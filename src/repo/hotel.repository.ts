@@ -3,6 +3,7 @@ import { Model } from 'mongoose';
 
 import { HotelDao } from '@app/dao/hotel/hotel.dao';
 import { HotelEntity } from '@app/schemas/hotel.schema';
+import { HotelCreationDto } from '@app/dto/hotel/create.hotel.dto';
 
 export class HotelRepository {
   constructor(
@@ -10,7 +11,7 @@ export class HotelRepository {
     private repository: Model<HotelDao>
   ) {}
 
-  async create(room) {
+  async create(room: HotelCreationDto) {
     return await this.repository.create(room);
   }
 }

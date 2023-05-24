@@ -1,4 +1,4 @@
-import { CreateRoomDto } from '@app/dto/room/create.room.dto';
+import { HotelCreationDto } from '@app/dto/hotel/create.hotel.dto';
 import { TokenPayloadDto } from '@app/dto/token.dto';
 import { HotelRepository } from '@app/repo/hotel.repository';
 import { JwtTokenService } from '@app/shared/services/JwtTokenService.service';
@@ -8,7 +8,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 export class HotelCreationService {
   constructor(private hotelRepository: HotelRepository, private jwtTokenService: JwtTokenService) {}
 
-  async createNewHotel(room: CreateRoomDto, token: TokenPayloadDto) {
+  async createNewHotel(room: HotelCreationDto, token: TokenPayloadDto) {
     const roomResponse = await this.hotelRepository.create(room);
 
     if (!!roomResponse?._id) {

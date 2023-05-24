@@ -1,25 +1,24 @@
-import { ROLE } from '@app/constants';
-import { Roles } from '@app/decorators/roles.decorator';
-import { CreateRoomDto } from '@app/dto/room/create.room.dto';
+import { HotelCreationDto } from '@app/dto/hotel/create.hotel.dto';
 import { TokenPayloadDto } from '@app/dto/token.dto';
 import { HotelCreationService } from '@app/services/hotel/hotel.create.service';
-import { Body, Controller, Headers, HttpStatus, Post, Response, UseGuards } from '@nestjs/common';
+import { Body, Controller, Headers, HttpStatus, Post, Response } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthenticationGuard } from 'src/guards/authentication.guard';
 import { BaseResponseDto } from '../BaseResponseDto';
 
-@ApiTags('rooms')
-@Controller('rooms')
+@ApiTags('hotels')
+@Controller('hotels')
 export class HotelController {
   constructor(private readonly hotelCreationService: HotelCreationService) {}
 
   // @UseGuards(AuthenticationGuard)
   // @Roles(ROLE.PROVIDER)
   @Post('new')
-  async createNewRoom(@Response() response, @Headers() header: TokenPayloadDto, @Body() roomInfo: CreateRoomDto) {
+  async createNewRoom(@Response() response, @Headers() header: TokenPayloadDto, @Body() hotelInfo: HotelCreationDto) {
     const { accessToken, refreshToken } = header;
 
-    const { data: responseData, token: newToken } = await this.hotelCreationService.createNewHotel(roomInfo, {
+    console.log('*********', hotelInfo);
+
+    const { data: responseData, token: newToken } = await this.hotelCreationService.createNewHotel(hotelInfo, {
       accessToken,
       refreshToken
     });

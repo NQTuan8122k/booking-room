@@ -14,7 +14,6 @@ import { HotelModule } from './modules/hotel.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    // MongooseModule.forRoot('mongodb://root:password@127.0.0.1:27017'),
     MongooseModule.forRoot('mongodb+srv://root:password1289@cluster0.e8zxjw8.mongodb.net/booking'),
     UserModule,
     AuthModule,

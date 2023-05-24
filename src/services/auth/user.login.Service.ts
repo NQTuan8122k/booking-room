@@ -33,7 +33,8 @@ export class UserLoginService {
       if (!!userInfo?.username && userInfo?.username == loginData.username && isMatchPassword && !!userInfo?.password) {
         const token = await this.jwtTokenService.createAuthToken({
           username: userInfo.username,
-          role: userInfo.role
+          role: userInfo.role,
+          id: userInfo.id
         });
 
         const responseData = new ResponseUserAuthDto(userInfo);

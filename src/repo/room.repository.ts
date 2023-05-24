@@ -22,10 +22,10 @@ export class RoomRepository {
     return await this.repository.create(room);
   }
 
-  async updateOne(_id, dataUpdate: UpdateRoomDto): Promise<any> {
+  async updateOne(id, dataUpdate: UpdateRoomDto): Promise<any> {
     try {
       return await this.repository.findByIdAndUpdate(
-        { _id: _id },
+        { id: id },
         {
           $set: {
             ...dataUpdate

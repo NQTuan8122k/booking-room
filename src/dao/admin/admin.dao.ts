@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export class AdminDao {
-  _id: Types.ObjectId;
+  id: Types.ObjectId;
   fullname: string;
   password: string;
   username: string;
@@ -14,7 +14,7 @@ export class AdminDao {
   address: string;
 
   constructor(props: Partial<AdminDao>) {
-    this._id = props._id;
+    this.id = props.id;
     this.password = props.password || null;
     this.username = props.username || null;
     this.status = props.status || null;

@@ -1,4 +1,5 @@
 export interface AdminInfoDto {
+  id: string;
   fullname: string;
   password: string;
   username: string;

@@ -3,19 +3,21 @@ import { TokenType } from '@app/constants/token-type';
 import { TokenPayloadDto } from '@app/dto/token.dto';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class JwtTokenService {
   constructor(private jwtService: JwtService) {}
 
-  async createAuthToken(data: { role: string; username: string }): Promise<TokenPayloadDto> {
+  async createAuthToken(data: { role: string; username: string; id: Types.ObjectId }): Promise<TokenPayloadDto> {
     return new TokenPayloadDto({
       accessToken: await this.jwtService.signAsync(
         {
           expiresIn: '3600s',
           username: data.username,
           type: TokenType.ACCESS_TOKEN,
-          role: data.role
+          role: data.role,
+          id: data.id
         },
         { expiresIn: '3600s' }
       ),
@@ -25,7 +27,8 @@ export class JwtTokenService {
           expiresIn: '86400s',
           username: data.username,
           type: TokenType.ACCESS_TOKEN,
-          role: data.role
+          role: data.role,
+          id: data.id
         },
         { expiresIn: '86400s' }
       )
@@ -65,6 +68,7 @@ export class JwtTokenService {
       username: string;
       type: string;
       role: string;
+      id: Types.ObjectId;
     };
     errorMessage?: string;
   }> {

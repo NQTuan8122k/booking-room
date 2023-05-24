@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export class RoomDao {
-  _id: Types.ObjectId;
+  id: Types.ObjectId;
   hotelId: Types.ObjectId;
   title: string;
   description: string;
@@ -18,7 +18,7 @@ export class RoomDao {
   bedType: string;
 
   constructor(props: Partial<RoomDao>) {
-    this._id = props._id;
+    this.id = props.id;
     this.hotelId = props.hotelId || null;
     this.title = props.title || null;
     this.description = props.description || null;

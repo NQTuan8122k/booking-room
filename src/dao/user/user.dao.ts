@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export class UserDao {
-  _id: Types.ObjectId;
+  id: Types.ObjectId;
   fullname: string;
   dateOfBirth: string;
   password: string;
@@ -13,9 +13,10 @@ export class UserDao {
   createAt: string;
   lastModify: string | null;
   role: string;
+  updatedAt: string | null;
 
   constructor(props: Partial<UserDao>) {
-    this._id = props._id;
+    this.id = props.id;
     this.email = props.email || null;
     this.dateOfBirth = props.dateOfBirth || null;
     this.password = props.password || null;
@@ -26,5 +27,6 @@ export class UserDao {
     this.createAt = props.createAt || null;
     this.lastModify = props.lastModify || null;
     this.role = props.role || null;
+    this.updatedAt = props.updatedAt || null;
   }
 }

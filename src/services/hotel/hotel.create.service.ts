@@ -11,7 +11,7 @@ export class HotelCreationService {
   async createNewHotel(room: HotelCreationDto, token: TokenPayloadDto) {
     const roomResponse = await this.hotelRepository.create(room);
 
-    if (!!roomResponse?._id) {
+    if (!!roomResponse?.id) {
       const newToken = await this.jwtTokenService.generationNewToken(token);
 
       return { data: roomResponse, token: newToken };

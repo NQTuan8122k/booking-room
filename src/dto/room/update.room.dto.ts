@@ -5,7 +5,7 @@ import { IsNotEmpty } from 'class-validator';
 export class UpdateRoomDto {
   @ApiProperty()
   @IsNotEmpty({ message: 'Id Id is required' })
-  _id: string;
+  id: string;
 
   @ApiProperty()
   @OptionalProperty()

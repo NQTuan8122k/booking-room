@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export class ResponseUserAuthDto {
-  _id: Types.ObjectId;
+  id: Types.ObjectId;
   fullname: string;
   dateOfBirth: string;
   username: string;
@@ -14,7 +14,7 @@ export class ResponseUserAuthDto {
   role: string;
 
   constructor(props: Partial<ResponseUserAuthDto>) {
-    this._id = props._id;
+    this.id = props.id;
     this.email = props.email || null;
     this.dateOfBirth = props.dateOfBirth || null;
     this.username = props.username || null;

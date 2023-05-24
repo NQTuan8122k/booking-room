@@ -1,10 +1,9 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { UserEntity } from '../schemas/user.schema';
 import { UserDao } from '../dao/user/user.dao';
 import { UserRegisterDto } from '../dto/user/user.dto';
-import { UserInfoDto } from '@app/dto/user/user.Info.dto';
+import { UserEntity } from '../schemas/user.schema';
 
 export class UserRepository {
   constructor(
@@ -12,29 +11,41 @@ export class UserRepository {
     private repository: Model<UserDao>
   ) {}
 
-  async createNewUser(user: UserRegisterDto) {
+  async createNewUser(user: UserRegisterDto): Promise<UserDao> {
     return await this.repository.create(user);
   }
 
-  async findAll(data): Promise<UserInfoDto[]> {
+  async findAll(data): Promise<UserDao[]> {
     return await this.repository.find({
       ...data
     });
   }
 
-  async findOne(data): Promise<UserInfoDto> {
+  async findOne(data): Promise<UserDao> {
     return await this.repository.findOne({ ...data });
   }
 
-  async updateOne(username): Promise<any> {
-    const result = await this.repository.updateOne({ username });
+  async removeOne(user): Promise<UserDao> {
+    const result = await this.repository.findOneAndDelete({ id: user });
 
     return result;
   }
 
-  async removeOne(user): Promise<any> {
-    const result = await this.repository.findOneAndDelete({ _id: user });
-
-    return result;
+  async updateOne(id, dataUpdate): Promise<UserDao> {
+    try {
+      return await this.repository.findByIdAndUpdate(
+        { id: id },
+        {
+          $set: {
+            ...dataUpdate
+          }
+        },
+        {
+          new: true
+        }
+      );
+    } catch (error) {
+      console.log('=** error', error);
+    }
   }
 }

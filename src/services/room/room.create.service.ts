@@ -11,7 +11,7 @@ export class RoomCreationService {
   async createNewRoom(room: CreateRoomDto, token: TokenPayloadDto) {
     const roomResponse = await this.roomRepository.create(room);
 
-    if (!!roomResponse?._id) {
+    if (!!roomResponse?.id) {
       const newToken = await this.jwtTokenService.generationNewToken(token);
 
       return { data: roomResponse, token: newToken };

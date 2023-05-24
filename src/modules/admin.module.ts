@@ -13,6 +13,6 @@ import { AdminLoginService } from '@app/services/admin/admin.login.Service';
   imports: [MongooseModule.forFeature([{ name: AdminEntity.name, schema: AdminSchema }])],
   providers: [AdminService, JwtTokenService, AdminSignupService, AdminLoginService, AdminRepository],
   controllers: [AdminController],
-  exports: [AdminService, AdminRepository]
+  exports: [AdminRepository]
 })
 export class AdminModule {}

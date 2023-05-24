@@ -12,6 +12,6 @@ import { RoomUpdateService } from '@app/services/room/room.update.service';
   imports: [MongooseModule.forFeature([{ name: RoomEntity.name, schema: RoomSchema }])],
   providers: [RoomCreationService, JwtTokenService, RoomRepository, RoomUpdateService],
   controllers: [RoomController],
-  exports: [RoomCreationService, RoomRepository, RoomUpdateService]
+  exports: [RoomRepository]
 })
 export class RoomModule {}

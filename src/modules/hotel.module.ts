@@ -10,6 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 @Module({
   imports: [MongooseModule.forFeature([{ name: HotelEntity.name, schema: HotelSchema }])],
   providers: [HotelCreationService, JwtTokenService, HotelRepository],
-  controllers: [HotelController]
+  controllers: [HotelController],
+  exports: [HotelRepository]
 })
 export class HotelModule {}

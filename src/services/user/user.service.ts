@@ -5,12 +5,14 @@ import { UserListQueryDto } from '@app/dto/user/query.ListUser.dto';
 import { UserRegisterDto } from '@app/dto/user/user.dto';
 import { QueryMeInfoDto } from '@app/dto/user/query.MeInfo.dto';
 import { UserInfoDto } from '@app/dto/user/user.Info.dto';
+import { TokenPayloadDto } from '@app/dto/token.dto';
+import { UserDao } from '@app/dao/user/user.dao';
 
 @Injectable()
 export class UserService {
   constructor(private userRepository: UserRepository, private jwtTokenService: JwtTokenService) {}
 
-  async findAll(data: UserListQueryDto): Promise<UserInfoDto[]> {
+  async findAll(data: UserListQueryDto): Promise<UserDao[]> {
     return await this.userRepository.findAll({
       ...(data?.username ? { username: { $regex: data?.username, $options: 'i' } } : {}),
       ...(data?.address ? { address: { $regex: data?.address, $options: 'i' } } : {}),
@@ -23,91 +25,11 @@ export class UserService {
     });
   }
 
-  async findOne(data: object): Promise<UserInfoDto> {
+  async findOne(data: object): Promise<UserDao> {
     return await this.userRepository.findOne({ ...data });
   }
 
   async create(user: UserRegisterDto) {
     return await this.userRepository.createNewUser(user);
-  }
-
-  async getMyInfo(queryUserInfo: QueryMeInfoDto) {
-    const userInToken = await this.jwtTokenService.getUserFromToken(queryUserInfo);
-
-    if (!userInToken?.user && !!userInToken.errorMessage) {
-      throw new HttpException(
-        {
-          status: 400,
-          description: userInToken.errorMessage,
-          error_message: userInToken.errorMessage,
-          error_detail: null,
-          timestamp: new Date().toISOString()
-        },
-        HttpStatus.BAD_REQUEST
-      );
-    }
-
-    const token = await this.jwtTokenService.createAuthToken({
-      role: userInToken.user.role,
-      username: userInToken.user.username
-    });
-
-    const user = await this.userRepository.findOne({
-      username: userInToken.user.username
-    });
-    if (user) {
-      const {
-        fullname,
-        dateOfBirth,
-        password,
-        username,
-        phoneNumber,
-        email,
-        address,
-        status,
-        createAt,
-        lastModify,
-        role,
-        updatedAt
-      } = user;
-
-      return {
-        request_id: 'string',
-        status: 200,
-        response_code: 'MY_INFO_200',
-        response_message: 'Get my info success',
-        response_description: 'Get my info success',
-        request_date_time: new Date().toISOString(),
-        ...token,
-        data: {
-          fullname,
-          dateOfBirth,
-          password,
-          username,
-          phoneNumber,
-          email,
-          address,
-          status,
-          createAt,
-          lastModify,
-          role,
-          updatedAt
-        }
-      };
-    } else {
-      throw new HttpException(
-        {
-          request_id: 'string',
-          status: 200,
-          response_code: 'MY_INFO_200',
-          response_message: 'Get my info success',
-          response_description: `Get my info success. But do not have user with username: ${userInToken.user.username}`,
-          request_date_time: new Date().toISOString(),
-          ...token,
-          data: null
-        },
-        HttpStatus.BAD_REQUEST
-      );
-    }
   }
 }

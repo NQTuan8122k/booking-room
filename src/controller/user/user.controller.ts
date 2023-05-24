@@ -1,4 +1,6 @@
-import { Body, Controller, HttpStatus, Post, Response, UseGuards } from '@nestjs/common';
+import { UpdateMyInfoDto } from './../../dto/user/update.myinfo.dto';
+import { TokenPayloadDto } from '@app/dto/token.dto';
+import { Body, Controller, Get, HttpStatus, Post, Response, UseGuards, Headers, Put } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ROLE } from 'src/constants';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -8,30 +10,38 @@ import { QueryUserInfoDto } from 'src/dto/user/query.UserInfo.dto';
 import { AuthenticationGuard } from 'src/guards/authentication.guard';
 import { UserService } from 'src/services/user/user.service';
 import { JwtTokenService } from 'src/shared/services/JwtTokenService.service';
+import { BaseResponseDto } from '../BaseResponseDto';
+import { MyInfoService } from '@app/services/user/myinfo.service';
+import { UpdateMyInfoService } from '@app/services/user/update.myinfo.service';
 
 @ApiTags('users')
 @Controller('users')
 export class UserController {
-  constructor(private readonly usersService: UserService, private jwtTokenService: JwtTokenService) {}
+  constructor(
+    private readonly usersService: UserService,
+    private readonly myInfoService: MyInfoService,
+    private readonly updateMyInfoService: UpdateMyInfoService,
+    private jwtTokenService: JwtTokenService
+  ) {}
 
   @UseGuards(AuthenticationGuard)
-  @Post('myInfo')
-  async queryMyInfo(@Response() response, @Body() queryUserInfo: QueryMeInfoDto) {
-    const res = await this.usersService.getMyInfo(queryUserInfo);
+  @Get('info')
+  async queryMyInfo(@Response() response, @Headers() Header: TokenPayloadDto) {
+    const { accessToken, refreshToken } = Header;
 
-    if (res.status === 200) {
-      response.status(HttpStatus.OK).json({
-        ...res
-      });
-    } else if (res.status === 400) {
-      response.status(HttpStatus.BAD_REQUEST).json({
-        ...res
-      });
-    } else {
-      response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-        ...res
-      });
-    }
+    const { data: responseData, token: newToken } = await this.myInfoService.myInfo({ accessToken, refreshToken });
+
+    const responseDto = new BaseResponseDto<any>();
+    responseDto.request_id = 'string';
+    responseDto.status = 200;
+    responseDto.response_code = 'MY_INFO_200';
+    responseDto.response_message = 'Get info success';
+    responseDto.response_description = 'Get info success';
+    responseDto.request_date_time = new Date();
+    responseDto.accessToken = newToken.accessToken;
+    responseDto.refreshToken = newToken.refreshToken;
+    responseDto.data = responseData;
+    return response.status(HttpStatus.OK).json(responseDto);
   }
 
   @UseGuards(AuthenticationGuard)
@@ -51,7 +61,8 @@ export class UserController {
 
     const token = await this.jwtTokenService.createAuthToken({
       role: userInToken.user.role,
-      username: userInToken.user.username
+      username: userInToken.user.username,
+      id: userInToken.user.id
     });
 
     const user = await this.usersService.findOne({
@@ -129,7 +140,8 @@ export class UserController {
 
     const token = await this.jwtTokenService.createAuthToken({
       role: userInToken.user.role,
-      username: userInToken.user.username
+      username: userInToken.user.username,
+      id: userInToken.user.id
     });
 
     const userList = await this.usersService.findAll({
@@ -149,77 +161,25 @@ export class UserController {
   }
 
   @UseGuards(AuthenticationGuard)
-  @Post('updateMe')
-  async updateMe(@Response() response, @Body() queryUserInfo: QueryMeInfoDto) {
-    const userInToken = await this.jwtTokenService.getUserFromToken(queryUserInfo);
-    if (!userInToken.user && !!userInToken.errorMessage) {
-      return response.status(HttpStatus.BAD_REQUEST).json({
-        status: 400,
-        description: userInToken.errorMessage,
-        error_message: userInToken.errorMessage,
-        error_detail: null,
-        timestamp: new Date().toISOString()
-      });
-    }
+  @Put('info')
+  async updateMyInfo(@Response() response, @Headers() header: TokenPayloadDto, @Body() body: UpdateMyInfoDto) {
+    const { accessToken, refreshToken } = header;
 
-    const token = await this.jwtTokenService.createAuthToken({
-      role: userInToken.user.role,
-      username: userInToken.user.username
-    });
+    const { data: responseData, token: newToken } = await this.updateMyInfoService.updateMyInfo(
+      { accessToken, refreshToken },
+      body
+    );
 
-    const user = await this.usersService.findOne({
-      username: userInToken.user.username
-    });
-    if (user) {
-      const {
-        fullname,
-        dateOfBirth,
-        password,
-        username,
-        phoneNumber,
-        email,
-        address,
-        status,
-        createAt,
-        lastModify,
-        role,
-        updatedAt
-      } = user;
-
-      return response.status(HttpStatus.OK).json({
-        request_id: 'string',
-        status: 200,
-        response_code: 'MY_INFO_200',
-        response_message: 'Get my info success',
-        response_description: 'Get my info success',
-        request_date_time: new Date().toISOString(),
-        ...token,
-        data: {
-          fullname,
-          dateOfBirth,
-          password,
-          username,
-          phoneNumber,
-          email,
-          address,
-          status,
-          createAt,
-          lastModify,
-          role,
-          updatedAt
-        }
-      });
-    } else {
-      return response.status(HttpStatus.OK).json({
-        request_id: 'string',
-        status: 200,
-        response_code: 'MY_INFO_200',
-        response_message: 'Get my info success',
-        response_description: `Get my info success. But do not have user with username: ${userInToken.user.username}`,
-        request_date_time: new Date().toISOString(),
-        ...token,
-        data: null
-      });
-    }
+    const responseDto = new BaseResponseDto<any>();
+    responseDto.request_id = 'string';
+    responseDto.status = 200;
+    responseDto.response_code = 'UPDATE_INFO_200';
+    responseDto.response_message = 'Update info success';
+    responseDto.response_description = 'Update info success';
+    responseDto.request_date_time = new Date();
+    responseDto.accessToken = newToken.accessToken;
+    responseDto.refreshToken = newToken.refreshToken;
+    responseDto.data = responseData;
+    return response.status(HttpStatus.OK).json(responseDto);
   }
 }

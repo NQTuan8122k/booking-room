@@ -22,7 +22,7 @@ export class RoomUpdateService {
       locationValue,
       price,
       roomCount,
-      _id
+      id
       // roomNo
     } = room;
 
@@ -40,9 +40,9 @@ export class RoomUpdateService {
       ...(roomCount ? { roomCount } : {})
     } as UpdateRoomDto;
 
-    const roomResponse = await this.roomRepository.updateOne(_id, dataUpdate);
+    const roomResponse = await this.roomRepository.updateOne(id, dataUpdate);
 
-    if (!!roomResponse?._id) {
+    if (!!roomResponse?.id) {
       const newToken = await this.jwtTokenService.generationNewToken(token);
 
       return { data: roomResponse, token: newToken };

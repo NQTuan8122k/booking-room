@@ -41,7 +41,8 @@ export class AdminController {
 
     const token = await this.jwtTokenService.createAuthToken({
       role: userInToken.user.role,
-      username: userInToken.user.username
+      username: userInToken.user.username,
+      id: userInToken.user.id
     });
 
     const user = await this.adminService.findOne({
@@ -117,7 +118,8 @@ export class AdminController {
 
     const token = await this.jwtTokenService.createAuthToken({
       role: userInToken.user.role,
-      username: userInToken.user.username
+      username: userInToken.user.username,
+      id: userInToken.user.id
     });
 
     const user = await this.adminService.findOne({
@@ -195,7 +197,8 @@ export class AdminController {
 
     const token = await this.jwtTokenService.createAuthToken({
       role: userInToken.user.role,
-      username: userInToken.user.username
+      username: userInToken.user.username,
+      id: userInToken.user.id
     });
 
     const userList = await this.adminService.findAll({
@@ -231,7 +234,8 @@ export class AdminController {
 
     const token = await this.jwtTokenService.createAuthToken({
       role: userInToken.user.role,
-      username: userInToken.user.username
+      username: userInToken.user.username,
+      id: userInToken.user.id
     });
 
     const user = await this.adminService.findOne({

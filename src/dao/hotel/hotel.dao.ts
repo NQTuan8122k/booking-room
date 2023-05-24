@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 
 export class HotelDao {
-  _id: Types.ObjectId;
+  id: Types.ObjectId;
   title: string;
   description: string;
   mainBackground: string;
@@ -19,7 +19,7 @@ export class HotelDao {
   category: string;
 
   constructor(props: Partial<HotelDao>) {
-    this._id = props._id;
+    this.id = props.id;
     this.title = props.title || null;
     this.description = props.description || null;
     this.mainBackground = props.mainBackground || null;

@@ -1,3 +1,5 @@
+import { MyInfoService } from '@app/services/user/myinfo.service';
+import { UpdateMyInfoService } from '@app/services/user/update.myinfo.service';
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserController } from 'src/controller/user/user.controller';
@@ -8,8 +10,8 @@ import { JwtTokenService } from 'src/shared/services/JwtTokenService.service';
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: UserEntity.name, schema: UserSchema }])],
-  providers: [UserService, JwtTokenService, UserRepository],
+  providers: [UserService, JwtTokenService, UserRepository, MyInfoService, UpdateMyInfoService],
   controllers: [UserController],
-  exports: [UserService, UserRepository]
+  exports: [UserRepository]
 })
 export class UserModule {}

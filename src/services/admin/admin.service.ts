@@ -40,6 +40,6 @@ export class AdminService {
   }
 
   async delete(id) {
-    return await this.usersRepository.findOneAndUpdate({ _id: id });
+    return await this.usersRepository.findOneAndUpdate({ id: id });
   }
 }

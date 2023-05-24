@@ -15,13 +15,13 @@ export class AdminRepository {
     return await this.repository.create(user);
   }
 
-  async findAll(data): Promise<AdminInfoDto[]> {
+  async findAll(data): Promise<AdminDao[]> {
     return await this.repository.find({
       ...data
     });
   }
 
-  async findOne(data): Promise<AdminInfoDto> {
+  async findOne(data): Promise<AdminDao> {
     return await this.repository.findOne({ ...data });
   }
 
@@ -32,7 +32,7 @@ export class AdminRepository {
   }
 
   async removeOne(user): Promise<any> {
-    const result = await this.repository.findOneAndDelete({ _id: user });
+    const result = await this.repository.findOneAndDelete({ id: user });
 
     return result;
   }
